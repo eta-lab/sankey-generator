@@ -18,6 +18,9 @@ import sys
 import traceback
 from datetime import timedelta
 
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 # JSON Clean-up Definitions - used for removing Null values and making JSON parsing a bit easier
 @singledispatch
 def remove_null_bool(ob):
@@ -43,7 +46,7 @@ session = pyhaystack.connect('skyspark',
                             project = 'ubcv',
                             pint=True,
                             grid_format=hszinc.MODE_JSON,
-                            http_args={'debug':False},
+                            http_args={'debug':False, "tls_verify":False},
                              )
 
 # Pull data from generic API call made avaialble by UBC EWS team
