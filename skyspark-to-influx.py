@@ -17,6 +17,7 @@ import logging
 import sys
 import traceback
 from datetime import timedelta
+import math
 
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -52,7 +53,7 @@ session = pyhaystack.connect('skyspark',
 # Pull data from generic API call made avaialble by UBC EWS team
 #data_pull = session.get_eval("apiDataTransfer()")
 
-dateRange="2019-07-15"
+
 d=datetime(year=2019,month=7,day=14)
 while d.strftime('%Y-%m-%d')!="2019-08-15":
     d = d + timedelta(days=1)
@@ -116,7 +117,8 @@ while d.strftime('%Y-%m-%d')!="2019-08-15":
                             value=1.0
                         else:
                             value=0.0
-
+                    if math.isna(value):
+                        value = 0.0
                     json_post_information = {
                         "measurement": "UBC_EWS",
                         "tags": {
