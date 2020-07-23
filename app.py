@@ -57,12 +57,12 @@ app.layout = html.Div(children=[
     dcc.Graph(id='sankey_diagram')
 ])
 
+
 @app.callback(
     dash.dependencies.Output('sankey_diagram', 'figure'),
     [dash.dependencies.Input('my-date-picker-range', 'start_date'),
      dash.dependencies.Input('my-date-picker-range', 'end_date'),
      dash.dependencies.Input('metric_selection', 'value')])
-
 def update_figure(start_date, end_date, value):
     if value is not None:
         metric_list = value
@@ -73,14 +73,17 @@ def update_figure(start_date, end_date, value):
         start_date = start_date + "T00:00:00"
     else:
         start_date = default_start_date
+
     if end_date is not None:
         end_date = end_date + "T00:00:00"
     else:
         end_date = default_end_date
 
     sankey_figure = generate_graph.generate_sankey(client, start_date, end_date, building_list, metric_list)
+
     return sankey_figure
 
 
 if __name__ == '__main__':
     app.run_server()
+
