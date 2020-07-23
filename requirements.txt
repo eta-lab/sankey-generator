@@ -1,0 +1,4 @@
+dash>=1.13.4
+pandas>=1.0.5
+influxdb>=5.3.0
+plotly>=4.9.0
