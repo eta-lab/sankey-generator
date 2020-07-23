@@ -12,11 +12,12 @@ from datetime import timedelta
 from influxdb import DataFrameClient
 import generate_graph
 
+# Stylesheet from plotly website
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
-client = DataFrameClient(host='206.12.92.81',port=8086,
+app.title = "UBC"
+client = DataFrameClient(host='206.12.92.81', port=8086,
                          username='public', password='public',
                          database='ION')
 # Default Values
