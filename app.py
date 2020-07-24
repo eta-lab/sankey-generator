@@ -25,7 +25,7 @@ client = DataFrameClient(host='206.12.88.106', port=8086,
                          username='root', password='root',
                          database='sankey-gen-wide')
 # Default Values
-building_list = list(pd.DataFrame(client.get_list_measurements()).name)
+building_list = list(pd.DataFrame(client.query("show field keys")['elec_energy']).fieldKey)
 
 default_start_date = (dt.today() - timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%S')
 default_end_date = dt.today().strftime('%Y-%m-%dT%H:%M:%S')
@@ -49,8 +49,8 @@ app.layout = html.Div(children=[
     dcc.Dropdown(
         id='metric_selection',
         options=[
-            {'label': 'Electricity Consumption', 'value': 'elec_energy'},
             {'label': 'Electric Power', 'value': 'elec_power'},
+            {'label': 'Electricity Consumption', 'value': 'elec_energy'},
             {'label': 'Gas Consumption', 'value': 'gas_volume'},
             {'label': 'Water Consumption', 'value': 'water_volume'}
         ],
