@@ -16,7 +16,7 @@ import generate_graph
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-app.title = "UBC"
+app.title = "ETA Lab Sankey Generator"
 client = DataFrameClient(host='206.12.92.81', port=8086,
                          username='public', password='public',
                          database='ION')
