@@ -17,9 +17,9 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.title = "ETA Lab Sankey Generator"
-client = DataFrameClient(host='206.12.92.81', port=8086,
-                         username='public', password='public',
-                         database='ION')
+client = DataFrameClient(host='206.12.88.106', port=8086,
+                         username='root', password='root',
+                         database='sankey-gen-narrow')
 # Default Values
 building_list = list(pd.DataFrame(client.get_list_measurements()).name)
 
@@ -86,5 +86,5 @@ def update_figure(start_date, end_date, value):
 
 
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(debug=True)
 
