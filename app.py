@@ -49,26 +49,25 @@ app.layout = html.Div(children=[
     dcc.Dropdown(
         id='metric_selection',
         options=[
-            {'label': 'Electric Power', 'value': 'elec_power'},
             {'label': 'Electricity Consumption', 'value': 'elec_energy'},
             {'label': 'Gas Consumption', 'value': 'gas_volume'},
-            {'label': 'Water Consumption', 'value': 'water_volume'}
         ],
-        value=['elec_energy'],
+        value=['elec_energy', 'gas_volume'],
         multi=True,
         searchable=False
     ),
     html.Div(id='output-container-date-picker-range'),
-    dcc.Graph(id='sankey_diagram')
+    dcc.Graph(id='sankey_diagram_energy'),
+    dcc.Graph(id='sankey_diagram_water')
 ])
 
 
-@app.callback(
-    dash.dependencies.Output('sankey_diagram', 'figure'),
-    [dash.dependencies.Input('my-date-picker-range', 'start_date'),
-     dash.dependencies.Input('my-date-picker-range', 'end_date'),
-     dash.dependencies.Input('metric_selection', 'value')])
-def update_figure(start_date, end_date, value):
+@app.callback([dash.dependencies.Output('sankey_diagram_energy', 'figure'),
+               dash.dependencies.Output('sankey_diagram_water', 'figure')],
+              [dash.dependencies.Input('my-date-picker-range', 'start_date'),
+               dash.dependencies.Input('my-date-picker-range', 'end_date'),
+               dash.dependencies.Input('metric_selection', 'value')])
+def update_figure_energy(start_date, end_date, value):
     if value is not None:
         metric_list = value
     else:
@@ -83,11 +82,21 @@ def update_figure(start_date, end_date, value):
         end_date = end_date + "T00:00:00"
     else:
         end_date = default_end_date
+    df, start_date, end_date = generate_graph.generate_sankey_df(client, start_date, end_date)
 
-    sankey_figure = generate_graph.generate_sankey(client, start_date, end_date, building_list, metric_list)
+    sankey_figure_energy = generate_graph.generate_sankey(df.loc[metric_list, :],
+                                                          building_list, start_date,
+                                                          end_date,
+                                                          data_type='energy')
 
-    return sankey_figure
+    sankey_figure_water = generate_graph.generate_sankey(df.loc[['water_volume'], :],
+                                                         building_list,
+                                                         start_date,
+                                                         end_date,
+                                                         data_type='water')
 
+
+    return sankey_figure_energy, sankey_figure_water
 
 if __name__ == '__main__':
     app.run_server(debug=True)
