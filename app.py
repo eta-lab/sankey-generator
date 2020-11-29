@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Run this app with `python app.py` and
-# visit http://127.0.0.1:8050/ in your web browser.
-
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
@@ -10,8 +5,8 @@ from dash.dependencies import Output, Input
 import pandas as pd
 from datetime import datetime as dt
 from datetime import timedelta
-from influxdb import DataFrameClient
-import generate_graph
+# from influxdb import DataFrameClient
+
 import plotly.express as px
 
 # Stylesheet from plotly website
@@ -125,7 +120,7 @@ app.layout = html.Div([
                                          searchable=False,
                                          placeholder='Select cluster',
                                          disabled=True,
-                                        style={'margin-bottom': '10px'}
+                                         style={'margin-bottom': '10px'}
                                          ),
 
                             dcc.Checklist(
@@ -185,7 +180,7 @@ app.layout = html.Div([
                                                   {'label': 'placeholder 2', 'value': 'ph2'}],
                                          placeholder='Select building',
                                          disabled=True,
-                                        style={'margin-bottom': '10px'}
+                                         style={'margin-bottom': '10px'}
                                          ),
                             dcc.Checklist(
                                 id='building-time-comparison-on-off',
@@ -208,21 +203,19 @@ app.layout = html.Div([
                         ]
                     )
                 ]
-        )
+            )
         ], style={'height': 400}),
         html.Button('Generate Diagram', id='generate_button', n_clicks=0,
-                    style={'width': '50%','margin-top': '50px'}
+                    style={'width': '50%', 'margin-top': '50px'}
                     )
 
-    ]
-        , style={'width': '33%', 'display': 'inline-block', 'vertical-align': 'top'}
+    ], style={'width': '33%', 'display': 'inline-block', 'vertical-align': 'top'}
     ),
     html.Div(
         dcc.Graph(
             id='example-graph',
             figure=fig
-        )
-        , style={'width': '66%','display': 'inline-block'}
+        ), style={'width': '66%', 'display': 'inline-block'}
     ),
 ])
 
@@ -255,6 +248,7 @@ def enable_cluster_comparison_selection(cluster_comparison_selection):
 
     return disabled, options
 
+
 # Enable the cluster date comparison
 @app.callback([
     Output(component_id='date-picker-cluster-comparison', component_property='disabled'),
@@ -269,6 +263,7 @@ def enable_cluster_time_comparison(cluster_comparison_time):
         disabled = True
         options = [{'label': 'Add another building for comparison', 'value': 'comp'}]
     return disabled, options
+
 
 # Enable the building selection comparison
 @app.callback([
@@ -301,6 +296,6 @@ def enable_cluster_time_comparison(cluster_comparison_time):
         options = [{'label': 'Add another building for comparison', 'value': 'comp'}]
     return disabled, options
 
+
 if __name__ == '__main__':
     app.run_server(debug=True)
-
