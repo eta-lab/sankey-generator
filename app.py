@@ -127,6 +127,7 @@ app.layout = html.Div([
                                          disabled=True,
                                         style={'margin-bottom': '10px'}
                                          ),
+
                             dcc.Checklist(
                                 id='cluster-time-comparison-on-off',
                                 options=[
@@ -157,7 +158,7 @@ app.layout = html.Div([
                                              {'label': 'CIRS', 'value': 'cirs'},
                                              {'label': 'Pharmacy', 'value': 'pharmacy'},
                                              {'label': 'AMS Nest', 'value': 'ams_nest'}],
-                                         placeholder='Select Building',
+                                         placeholder='Select building',
                                          style={'margin-bottom': '10px', 'margin-top': '10px'}),
                             html.P(children='Select time period',
                                    style={'margin-bottom': '10px'}),
