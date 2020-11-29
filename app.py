@@ -52,7 +52,7 @@ app.layout = html.Div([
                                         style={'margin-bottom': '100px'}
                                     ),
                                 dcc.Checklist(
-                                    id='comp_campus',
+                                    id='comparison-campus-on-off',
                                     options=[
                                         {'label': 'Add another time period for comparison',
                                          'value': 'comp'}
@@ -60,7 +60,7 @@ app.layout = html.Div([
                                     ),
                                 html.Div([
                                     dcc.DatePickerRange(
-                                        id='date-picker-campus-comp',
+                                        id='date-picker-campus-comparison',
                                         min_date_allowed=dt(2019, 12, 1),
                                         max_date_allowed=dt.today(),
                                         start_date=(dt.today() - timedelta(days=1)).strftime('%Y-%m-%d'),
@@ -75,7 +75,7 @@ app.layout = html.Div([
                             ], style={'height': '700'})
                         ]),
                     dcc.Tab(
-                        label="Building Cluster",
+                        label="Cluster",
                         id="building_cluster",
                         children=[
                             dcc.Dropdown(id='cluster-type-selection',
@@ -206,24 +206,28 @@ app.layout = html.Div([
             )
         ], style={'height': 400}),
         html.Button('Generate Diagram', id='generate_button', n_clicks=0,
-                    style={'width': '50%', 'margin-top': '50px'}
+                    style={'width': '100%', 'margin-top': '50px'}
                     )
 
-    ], style={'width': '33%', 'display': 'inline-block', 'vertical-align': 'top'}
+    ], style={'width': '20%', 'display': 'inline-block', 'vertical-align': 'top'}
     ),
-    html.Div(
-        dcc.Graph(
-            id='example-graph',
-            figure=fig
-        ), style={'width': '66%', 'display': 'inline-block'}
+    html.Div([
+            dcc.Graph(
+                id='example-graph',
+                figure=fig,
+            ),
+
+    ], style={'width': '74%', 'display': 'inline-block',
+              "border": "2px black solid", 'margin-left': '10px',
+              'height': 680}
     ),
 ])
 
 
 # Show or hide campus level dates for comparison
 @app.callback(
-    Output(component_id='date-picker-campus-comp', component_property='disabled'),
-    [Input(component_id='comp_campus', component_property='value')])
+    Output(component_id='date-picker-campus-comparison', component_property='disabled'),
+    [Input(component_id='comparison-campus-on-off', component_property='value')])
 def enable_campus_comparison(display_campus_comparison):
     if display_campus_comparison:
         return False
