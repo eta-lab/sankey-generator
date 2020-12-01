@@ -5,9 +5,8 @@ from dash.dependencies import Output, Input
 import pandas as pd
 from datetime import datetime as dt
 from datetime import timedelta
-# from influxdb import DataFrameClient
-
-import plotly.express as px
+from influxdb import DataFrameClient
+import generate_graph
 
 # Stylesheet from plotly website
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -15,14 +14,17 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.title = "ETA Lab Sankey Generator"
 
-df = pd.DataFrame({
-    "Fruit": ["Apples", "Oranges", "Bananas", "Apples", "Oranges", "Bananas"],
-    "Amount": [4, 1, 2, 2, 4, 5],
-    "City": ["SF", "SF", "SF", "Montreal", "Montreal", "Montreal"]
-})
+building_metadata = pd.read_csv("./metadata/BuildingMetadataAll.csv")
+sensor_metadata = pd.read_csv("./metadata/energy_main_meter.csv")
 
-fig = px.bar(df, x="Fruit", y="Amount", color="City", barmode="group")
+influx_client = DataFrameClient(host='206.12.88.106', port=8086,
+                         username='root', password='root',
+                         database='cpsc-sankey')
 
+metric_list = ['Elec', 'Gas', 'HotWater']
+
+default_start_date = "2020-10-01T00:00:00Z"
+default_end_date = "2020-10-31T23:59:59Z"
 
 app.layout = html.Div([
 
@@ -44,10 +46,10 @@ app.layout = html.Div([
                                        style={'margin-top': '10px'}),
                                 dcc.DatePickerRange(
                                         id='date-picker-campus',
-                                        min_date_allowed=dt(2019, 12, 1),
+                                        min_date_allowed=dt(2017, 12, 1),
                                         max_date_allowed=dt.today(),
-                                        start_date=(dt.today() - timedelta(days=1)).strftime('%Y-%m-%d'),
-                                        end_date=dt.today().strftime('%Y-%m-%d'),
+                                        start_date=default_start_date,
+                                        end_date=default_end_date,
                                         initial_visible_month=dt.today(),
                                         style={'margin-bottom': '100px'}
                                     ),
@@ -213,8 +215,8 @@ app.layout = html.Div([
     ),
     html.Div([
             dcc.Graph(
-                id='example-graph',
-                figure=fig,
+                id='sankey_diagram_1',
+                style={'height': '100%'}
             ),
 
     ], style={'width': '74%', 'display': 'inline-block',
@@ -223,6 +225,22 @@ app.layout = html.Div([
     ),
 ])
 
+
+@app.callback(
+    Output(component_id='sankey_diagram_1', component_property='figure'),
+    [Input(component_id='date-picker-campus', component_property='start_date'),
+     Input(component_id='date-picker-campus', component_property='end_date')])
+def generate_example_sankey(start_date, end_date):
+    query_result = generate_graph.generate_influx_query(influx_client,
+                                                        start_date,
+                                                        end_date,
+                                                        metric_list)
+
+    sankey_figure = generate_graph.generate_sankey(query_result,
+                                                   metric_list,
+                                                   building_metadata)
+
+    return sankey_figure
 
 # Show or hide campus level dates for comparison
 @app.callback(

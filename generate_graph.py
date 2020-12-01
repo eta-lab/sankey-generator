@@ -1,59 +1,57 @@
 import pandas as pd
 import plotly.graph_objects as go
+import numpy as np
 from datetime import datetime as dt
 from datetime import timedelta
 
 
-def generate_sankey_elements(df):
+def generate_sankey_elements(query_result, metric_list, building_metadata):
     # Initialize lists
-    labels = []
+    labels = np.append(metric_list, building_metadata.building)
     sources = []
     targets = []
     values = []
-    n_metrics = len(df.index)
 
-    labels.extend(list(df.index))
-    labels.extend(list(df.columns))
-
-    for i in range(n_metrics):
-
-        sources.extend([i] * len(df.columns))
-
-        targets.extend(range(n_metrics, len(labels)))
-
-        values.extend(list(df.iloc[i, :]))
+    for metric in metric_list:
+        for col in query_result[metric].columns:
+            sources.append(np.where(labels == metric)[0][0])
+            targets.append(np.where(labels == col)[0][0])
+            values.append(query_result[metric][col][0])
 
     return labels, sources, targets, values
 
 
-def generate_sankey_df(influx_client, start_date, end_date):
+def generate_string_from_array(array):
+    array_string = ""
 
-    #  include the data from the end date even if the day is not over
-    end_date_query = (dt.strptime(end_date[:10],  "%Y-%m-%d") + timedelta(days=1)).strftime('%Y-%m-%dT%H:%M:%S')
+    for element in array:
+        array_string = array_string + element + ', '
 
-    where_params = {'t0': (start_date+"Z"),
-                    't1': (end_date_query+"Z")}
-    # Initializing dataframe
-    df = pd.DataFrame()
-    metric_list = ['elec_energy', 'gas_volume', 'water_volume']
+    return array_string[:-2]
+
+
+def generate_influx_query(influx_client, start_date, end_date, metric_list):
+
+    where_parameters = {'t0': start_date,
+                        't1': end_date}
+
+    metric_string = generate_string_from_array(metric_list)
+
+    query_influx = 'select sum(*) from {} where time>=$t0 and time<=$t1'.format(metric_string)
+    query_result = influx_client.query(query_influx, bind_params=where_parameters)
+
     for metric in metric_list:
-        query_influx = 'select sum(*) from {} where time<=$t0 and time<=$t1'.format(metric, metric)
-        metric_string = "sum_"
-
-        query_result = influx_client.query(query_influx, bind_params=where_params)
-        query_result[metric].columns = [col_name.replace(metric_string, '')
+        query_result[metric].columns = [col_name.replace('sum_', '')
                                         for col_name in query_result[metric].columns]
 
-        df = df.append(query_result[metric])
-    df.index = metric_list
+    return query_result
 
-    return df, start_date, end_date
 
-def generate_sankey(df, building_list, start_date, end_date, data_type):
+def generate_sankey(query_result, metric_list, building_metadata):
 
-    df = df.loc[:, df.columns.isin(building_list)]
-
-    labels, sources, targets, values = generate_sankey_elements(df)
+    labels, sources, targets, values = generate_sankey_elements(query_result,
+                                                                metric_list,
+                                                                building_metadata)
 
     sankey_figure = go.Figure(
         data=[go.Sankey(
@@ -71,16 +69,5 @@ def generate_sankey(df, building_list, start_date, end_date, data_type):
             )
         )]
     )
-
-    formatted_start_date = dt.strptime(start_date[:10], "%Y-%m-%d").strftime("%b %d %Y")
-    formatted_end_date = dt.strptime(end_date[:10],  "%Y-%m-%d").strftime("%b %d %Y")
-
-    if data_type == 'energy':
-        sankey_figure.update_layout(
-            title_text="Energy Consumption flow from {} to {}".format(formatted_start_date, formatted_end_date))
-    elif data_type == 'water':
-        sankey_figure.update_layout(
-            title_text="Water Consumption flow from {} to {}".format(formatted_start_date, formatted_end_date))
-
 
     return sankey_figure
