@@ -4,7 +4,6 @@ import dash_html_components as html
 from dash.dependencies import Output, Input
 import pandas as pd
 from datetime import datetime as dt
-from datetime import timedelta
 from influxdb import DataFrameClient
 import numpy as np
 import generate_graph
@@ -46,216 +45,86 @@ app.layout = html.Div([
         html.H4(children='Visualizing energy use flows on UBC Campus',
                 style={'font-style': 'italic', 'fontSize': '12'}),
         html.Div([
-            dcc.Tabs(
-                id="data-level",
-                value="campus",
-                children=[
-                    dcc.Tab(
-                        label="Campus",
-                        value="campus",
-                        children=[
-                            html.Div([
-                                dcc.Dropdown(id='cluster-type-selection-campus',
-                                             options=[
-                                                 {'label': 'Year Built', 'value': 'year_built_grouping'},
-                                                 {'label': 'Building Type', 'value': 'building_type_mod'},
-                                                 {'label': 'Size (m^2)', 'value': 'area_grouping'}],
-                                             searchable=False,
-                                             placeholder='Select cluster type',
-                                             value='building_type_mod',
-                                             style={'margin-bottom': '10px', 'margin-top': '10px'})
-                                ,
-                                dcc.Dropdown(id='cluster-selection-campus',
-                                             searchable=False,
-                                             placeholder='Select cluster',
-                                             style={'margin-bottom': '10px'})
-                                ,
-                                html.P(children='Select time period',
-                                       style={'margin-top': '10px'})
-                                ,
-                                dcc.DatePickerRange(
-                                        id='date-picker-campus',
-                                        min_date_allowed=min_date,
-                                        max_date_allowed=max_date,
-                                        start_date=default_start_date,
-                                        end_date=default_end_date,
-                                        initial_visible_month=initial_date,
-                                        style={'margin-bottom': '30px'})
-                                ,
-                                dcc.Checklist(
-                                        id='cluster-comparison-on-off-campus',
-                                        options=[
-                                            {'label': 'Add another cluster for comparison',
-                                             'value': 'comp',
-                                             'disabled': True
-                                             }
-                                        ],
-                                        style={'margin-bottom': '10px'}
-                                                )
-                                ,
-                                dcc.Dropdown(id='cluster-comparison-selection-campus',
-                                             searchable=False,
-                                             placeholder='Select cluster',
-                                             disabled=True,
-                                             style={'margin-bottom': '10px'}
-                                             )
-                                ,
-                                dcc.Checklist(
-                                    id='comparison-date-campus-on-off',
-                                    options=[
-                                        {'label': 'Add another time period for comparison',
-                                         'value': 'comp'}
-                                        ])
-                                ,
-                                html.Div([
-                                    dcc.DatePickerRange(
-                                        id='date-picker-campus-comparison',
-                                        min_date_allowed=min_date,
-                                        max_date_allowed=max_date,
-                                        start_date=default_start_date,
-                                        end_date=default_end_date,
-                                        initial_visible_month=initial_date)
+            dcc.Dropdown(id='cluster-type-selection-campus',
+                         options=[
+                             {'label': 'Year Built', 'value': 'year_built_grouping'},
+                             {'label': 'Building Type', 'value': 'building_type_mod'},
+                             {'label': 'Size (m^2)', 'value': 'area_grouping'}],
+                         searchable=False,
+                         placeholder='Select cluster type',
+                         value='building_type_mod',
+                         style={'margin-bottom': '10px', 'margin-top': '10px'})
+            ,
+            dcc.Dropdown(id='cluster-selection-campus',
+                         searchable=False,
+                         placeholder='Select cluster',
+                         multi=True,
+                         style={'margin-bottom': '10px'}),
+            dcc.Dropdown(id='building-selection-campus',
+                         options=[{'label': 'pharmacy', 'value': 'pharmacy'}],
+                         searchable=True,
+                         placeholder='Select building',
+                         disabled=True,
+                         style={'margin-bottom': '10px'})
+            ,
+            html.P(children='Select time period',
+                   style={'margin-top': '10px'})
+            ,
+            dcc.DatePickerRange(
+                    id='date-picker-campus',
+                    min_date_allowed=min_date,
+                    max_date_allowed=max_date,
+                    start_date=default_start_date,
+                    end_date=default_end_date,
+                    initial_visible_month=initial_date,
+                    style={'margin-bottom': '30px'})
+            ,
+            dcc.Checklist(
+                    id='cluster-comparison-on-off-campus',
+                    options=[
+                        {'label': 'Add another element for comparison',
+                         'value': 'comp',
+                         'disabled': True
+                         }
+                    ],
+                    style={'margin-bottom': '10px'}
+                            )
+            ,
+            dcc.Dropdown(id='cluster-comparison-selection-campus',
+                         searchable=False,
+                         placeholder='Select cluster to compare',
+                         disabled=True,
+                         style={'margin-bottom': '10px'}
+                         )
+            ,
+            dcc.Dropdown(id='building-comparison-selection-campus',
+                         searchable=True,
+                         placeholder='Select building to compare',
+                         disabled=True,
+                         style={'margin-bottom': '10px'}
+                         )
+            ,
+            dcc.Checklist(
+                id='comparison-date-campus-on-off',
+                options=[
+                    {'label': 'Add another time period for comparison',
+                     'value': 'comp'}
+                    ])
+            ,
+            html.Div([
+                dcc.DatePickerRange(
+                    id='date-picker-campus-comparison',
+                    min_date_allowed=min_date,
+                    max_date_allowed=max_date,
+                    start_date=default_start_date,
+                    end_date=default_end_date,
+                    initial_visible_month=initial_date)
 
-                                ], id='campus_comp_container',
-                                    style={'display': 'block'}
-                                ),
+            ], id='campus_comp_container',
+                style={'display': 'block'}
+            ),
 
-                            ], style={'height': '700'})
-                        ]),
-                    dcc.Tab(
-                        label="Cluster",
-                        id="building_cluster",
-                        children=[
-                            dcc.Dropdown(id='cluster-type-selection',
-                                         options=[{'label': 'Year Built', 'value': 'year_built_grouping'},
-                                                  {'label': 'Building Type', 'value': 'building_type_mod'},
-                                                  {'label': 'Size (m^2)', 'value': 'area_grouping'}],
-                                         searchable=False,
-                                         placeholder='Select cluster type',
-                                         style={'margin-bottom': '10px', 'margin-top': '10px'}),
-
-                            dcc.Dropdown(id='cluster-selection',
-                                         options=[{'label': 'placeholder 1', 'value': 'ph1'},
-                                                  {'label': 'placeholder 2', 'value': 'ph2'}],
-                                         searchable=False,
-                                         placeholder='Select cluster',
-                                         style={'margin-bottom': '10px'}),
-
-                            html.P(children='Select time period',
-                                   style={'margin-bottom': '10px'}),
-
-                            dcc.DatePickerRange(
-                                id='date-picker-cluster',
-                                min_date_allowed=min_date,
-                                max_date_allowed=max_date,
-                                start_date=default_start_date,
-                                end_date=default_end_date,
-                                initial_visible_month=initial_date,
-                                style={'margin-bottom': '30px'}
-                                                ),
-                            dcc.Checklist(
-                                id='cluster-comparison-on-off',
-                                options=[
-                                    {'label': 'Add another cluster for comparison',
-                                     'value': 'comp'}
-                                ],
-                                style={'margin-bottom': '10px'}
-                                        ),
-                            dcc.Dropdown(id='cluster-comparison-selection',
-                                         options=[{'label': 'placeholder 1', 'value': 'ph1'},
-                                                  {'label': 'placeholder 2', 'value': 'ph2'}],
-                                         searchable=False,
-                                         placeholder='Select cluster',
-                                         disabled=True,
-                                         style={'margin-bottom': '10px'}
-                                         ),
-
-                            dcc.Checklist(
-                                id='cluster-time-comparison-on-off',
-                                options=[
-                                    {'label': 'Add another time period for comparison',
-                                     'value': 'comp'}
-                                ],
-                                style={'margin-bottom': '10px'}
-                            ),
-                            dcc.DatePickerRange(
-                                id='date-picker-cluster-comparison',
-                                min_date_allowed=min_date,
-                                max_date_allowed=max_date,
-                                start_date=default_start_date,
-                                end_date=default_end_date,
-                                initial_visible_month=initial_date,
-                                disabled=True,
-                                style={'margin-bottom': '10px'}
-                            ),
-
-                        ]
-                    ),
-                    dcc.Tab(
-                        label="Building",
-                        id="building_level",
-                        children=[
-                            dcc.Dropdown(id='building_selection',
-                                         options=[
-                                             {'label': 'CIRS', 'value': 'cirs'},
-                                             {'label': 'Pharmacy', 'value': 'pharmacy'},
-                                             {'label': 'AMS Nest', 'value': 'ams_nest'}],
-                                         placeholder='Select building',
-                                         style={'margin-bottom': '10px', 'margin-top': '10px'}),
-                            html.P(children='Select time period',
-                                   style={'margin-bottom': '10px'}),
-
-                            dcc.DatePickerRange(
-                                id='date-picker-building',
-                                min_date_allowed=min_date,
-                                max_date_allowed=max_date,
-                                start_date=default_start_date,
-                                end_date=default_end_date,
-                                initial_visible_month=initial_date,
-                                style={'margin-bottom': '30px'}
-                                                ),
-                            dcc.Checklist(
-                                id='building-comparison-on-off',
-                                options=[
-                                    {'label': 'Add another building for comparison',
-                                     'value': 'comp'}
-                                ],
-                                style={'margin-bottom': '10px'}
-                                        ),
-                            dcc.Dropdown(id='building-comparison-selection',
-                                         options=[{'label': 'placeholder 1', 'value': 'ph1'},
-                                                  {'label': 'placeholder 2', 'value': 'ph2'}],
-                                         placeholder='Select building',
-                                         disabled=True,
-                                         style={'margin-bottom': '10px'}
-                                         ),
-                            dcc.Checklist(
-                                id='building-time-comparison-on-off',
-                                options=[
-                                    {'label': 'Add another time period for comparison',
-                                     'value': 'comp'}
-                                ],
-                                style={'margin-bottom': '10px'}
-                            ),
-                            dcc.DatePickerRange(
-                                id='date-picker-building-comparison',
-                                min_date_allowed=min_date,
-                                max_date_allowed=max_date,
-                                start_date=default_start_date,
-                                end_date=default_end_date,
-                                initial_visible_month=initial_date,
-                                disabled=True,
-                                style={'margin-bottom': '10px'}
-                            ),
-                        ]
-                    )
-                ]
-            )
-        ], style={'height': 400}),
-        html.Button('Generate Diagram', id='generate_button', n_clicks=0,
-                    style={'width': '100%', 'margin-top': '50px'}
-                    )
-
+        ], style={'height': '700'})
     ], style={'width': '20%', 'display': 'inline-block', 'vertical-align': 'top'}
     ),
     html.Div([
@@ -287,9 +156,6 @@ def generate_cluster_list_campus(cluster_type):
 
     return options
 
-# TODO unable "add another cluster for comparison" when selecting one cluster
-
-# TODO generating list whenever the "add another cluster for comparison" is checked
 
 # Generate Graph when the cluster type or date is changed campus view
 @app.callback(
@@ -301,13 +167,16 @@ def generate_cluster_list_campus(cluster_type):
 def generate_campus_sankey(cluster_type, start_date, end_date, cluster_selection):
 
     if cluster_selection:
-        is_multi_level=True
-        metadata = building_metadata[building_metadata[cluster_type] == cluster_selection]
 
+        metadata = building_metadata[building_metadata[cluster_type].isin(cluster_selection)]
+        if len(metadata) < 20:
+            is_multi_level = True
+        else:
+            is_multi_level = False
     else:
         is_multi_level = False
         metadata = building_metadata
-        
+
     query_result = generate_graph.generate_influx_query(influx_client,
                                                         start_date,
                                                         end_date,
@@ -321,8 +190,6 @@ def generate_campus_sankey(cluster_type, start_date, end_date, cluster_selection
                                                    is_multi_level)
 
     return sankey_figure
-
-# TODO Duplicating the behavior of the cluster tab for the tick selection
 
 
 # Hide the cluster comparison if no cluster is selected
@@ -352,7 +219,7 @@ def on_off_and_list_for_cluster_comparison(cluster_selection, cluster_type, date
         disabled_date = True
         if cluster_selection:
 
-            options_on_off = [{'label': 'Add another cluster for comparison',
+            options_on_off = [{'label': 'Add another element for comparison',
                               'value': 'comp'}]
             disabled_cluster = False
             cluster_list = building_metadata[cluster_type].unique()
@@ -361,7 +228,7 @@ def on_off_and_list_for_cluster_comparison(cluster_selection, cluster_type, date
 
             options_cluster = utilities.generate_option_array_from_list(cluster_list_compare)
         else:
-            options_on_off = [{'label': 'Add another cluster for comparison',
+            options_on_off = [{'label': 'Add another element for comparison',
                                'value': 'comp',
                                'disabled': True}]
             disabled_cluster = True
@@ -372,75 +239,8 @@ def on_off_and_list_for_cluster_comparison(cluster_selection, cluster_type, date
 
 # Show or hide campus selection
 # TODO Generate Graph when comparing 2 date sets campus view
+# TODO generating list whenever the "add another cluster for comparison" is checked
 
-
-
-'''
-# Enable the cluster selection for comparison
-@app.callback([
-    Output(component_id='cluster-comparison-selection', component_property='disabled'),
-    Output(component_id='cluster-time-comparison-on-off', component_property='options')
-    ],
-    [Input(component_id='cluster-comparison-on-off', component_property='value')])
-def enable_cluster_comparison_selection(cluster_comparison_selection):
-    if cluster_comparison_selection:
-        disabled = False
-        options = [{'label': 'Add another time period for comparison', 'value': 'comp', 'disabled': True}]
-
-    else:
-        disabled = True
-        options = [{'label': 'Add another time period for comparison', 'value': 'comp'}]
-
-    return disabled, options
-
-
-# Enable the cluster date comparison
-@app.callback([
-    Output(component_id='date-picker-cluster-comparison', component_property='disabled'),
-    Output(component_id='cluster-comparison-on-off', component_property='options')
-    ],
-    [Input(component_id='cluster-time-comparison-on-off', component_property='value')])
-def enable_cluster_time_comparison(cluster_comparison_time):
-    if cluster_comparison_time:
-        disabled = False
-        options = [{'label': 'Add another cluster for comparison', 'value': 'comp', 'disabled': True}]
-    else:
-        disabled = True
-        options = [{'label': 'Add another cluster for comparison', 'value': 'comp'}]
-    return disabled, options
-
-
-# Enable the building selection comparison
-@app.callback([
-    Output(component_id='building-comparison-selection', component_property='disabled'),
-    Output(component_id='building-time-comparison-on-off', component_property='options')
-    ],
-    [Input(component_id='building-comparison-on-off', component_property='value')])
-def enable_cluster_time_comparison(cluster_comparison_time):
-    if cluster_comparison_time:
-        disabled = False
-        options = [{'label': 'Add another time period for comparison', 'value': 'comp', 'disabled': True}]
-    else:
-        disabled = True
-        options = [{'label': 'Add another time period for comparison', 'value': 'comp'}]
-    return disabled, options
-
-
-# Enable the cluster date comparison
-@app.callback([
-    Output(component_id='date-picker-building-comparison', component_property='disabled'),
-    Output(component_id='building-comparison-on-off', component_property='options')
-    ],
-    [Input(component_id='building-time-comparison-on-off', component_property='value')])
-def enable_cluster_time_comparison(cluster_comparison_time):
-    if cluster_comparison_time:
-        disabled = False
-        options = [{'label': 'Add another building for comparison', 'value': 'comp', 'disabled': True}]
-    else:
-        disabled = True
-        options = [{'label': 'Add another building for comparison', 'value': 'comp'}]
-    return disabled, options
-'''
 
 if __name__ == '__main__':
     app.run_server(debug=True)

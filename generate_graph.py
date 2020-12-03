@@ -1,8 +1,6 @@
 import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
-from datetime import datetime as dt
-from datetime import timedelta
 import utilities
 
 
