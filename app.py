@@ -283,7 +283,7 @@ def generate_cluster_list_campus(cluster_type):
         options = utilities.generate_option_array_from_list(cluster_list)
 
     else:
-        options = {'label': 'Not Found', 'value': 'nan'}
+        options = [{'label': 'Not Found', 'value': 'nan'}]
 
     return options
 
@@ -296,9 +296,18 @@ def generate_cluster_list_campus(cluster_type):
     Output(component_id='sankey_diagram_1', component_property='figure'),
     [Input(component_id='cluster-type-selection-campus', component_property='value'),
      Input(component_id='date-picker-campus', component_property='start_date'),
-     Input(component_id='date-picker-campus', component_property='end_date')])
-def generate_campus_sankey(cluster_type, start_date, end_date):
+     Input(component_id='date-picker-campus', component_property='end_date'),
+     Input(component_id='cluster-selection-campus', component_property='value')])
+def generate_campus_sankey(cluster_type, start_date, end_date, cluster_selection):
 
+    if cluster_selection:
+        is_multi_level=True
+        metadata = building_metadata[building_metadata[cluster_type] == cluster_selection]
+
+    else:
+        is_multi_level = False
+        metadata = building_metadata
+        
     query_result = generate_graph.generate_influx_query(influx_client,
                                                         start_date,
                                                         end_date,
@@ -306,10 +315,10 @@ def generate_campus_sankey(cluster_type, start_date, end_date):
 
     sankey_figure = generate_graph.generate_sankey(query_result,
                                                    metric_list,
-                                                   building_metadata,
+                                                   metadata,
                                                    color_dict,
-                                                   cluster_type=cluster_type,
-                                                   is_multi_level=False)
+                                                   cluster_type,
+                                                   is_multi_level)
 
     return sankey_figure
 
@@ -333,28 +342,31 @@ def on_off_and_list_for_cluster_comparison(cluster_selection, cluster_type, date
 
     if date_compare:
         disabled_date = False
-        options_on_off = {'label': 'Add another cluster for comparison',
-                          'value': 'comp',
-                          'disabled': True}
+        options_on_off = [{'label': 'Add another cluster for comparison',
+                           'value': 'comp',
+                           'disabled': True}]
         disabled_cluster = True
-        options_cluster = ''
+        options_cluster = []
 
     else:
         disabled_date = True
-        if cluster_selection == 'None':
-            options_on_off = {'label': 'Add another cluster for comparison',
-                              'value': 'comp',
-                              'disabled': True}
+        if cluster_selection:
+
+            options_on_off = [{'label': 'Add another cluster for comparison',
+                              'value': 'comp'}]
+            disabled_cluster = False
+            cluster_list = building_metadata[cluster_type].unique()
+            cluster_list_compare = np.delete(cluster_list,
+                                             np.where(cluster_list == cluster_selection))
+
+            options_cluster = utilities.generate_option_array_from_list(cluster_list_compare)
+        else:
+            options_on_off = [{'label': 'Add another cluster for comparison',
+                               'value': 'comp',
+                               'disabled': True}]
             disabled_cluster = True
 
-            options_cluster = ''
-        else:
-            options_on_off = {'label': 'Add another cluster for comparison',
-                              'value': 'comp'}
-            disabled_cluster = False
-            cluster_list_compare = building_metadata[cluster_type].unique()
-            cluster_list_compare.remove(np.where(cluster_list_compare == cluster_selection))
-            options_cluster = utilities.generate_option_array_from_list(cluster_list_compare)
+            options_cluster = []
 
     return options_on_off, disabled_cluster, options_cluster, disabled_date
 

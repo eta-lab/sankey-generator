@@ -19,3 +19,5 @@ def generate_option_array_from_list(list_of_options):
     options = []
     for option in list_of_options:
         temps_dict = {'label': option, 'value': option}
+        options.append(temps_dict)
+    return options
