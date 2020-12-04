@@ -1,132 +1,132 @@
 building,long_name,area,year_built,percent_class,percent_lab,percent_library,percent_office,building_type_EWS,building_type_mod,area_grouping,year_built_grouping
-AERL,Aquatic Ecosystems Research Laboratory,5368,2005,0.06,0.05,0,0.46,office,office,,2005
-Allard_Hall,Allard Hall,14909,2011,0.08,0,0.2,0.2,office,office,,2010
-Alumni_Centre,Robert H Lee Alumni Centre,4106,2015,0,0,0,0.18,,office,,2015
-AMS_Nest,AMS Student Nest,22933,2015,0,0,0,0.07,,student,,2015
-Ansoc,Anthropology and Sociology Building,6220,1950,0.07,0.1,0,0.356,office,office,,1950
-Aquatic_Centre,Aquatic Centre,8041,2017,0,0,0,0,recreational,recreational,,2015
-Asian_Centre,Asian Centre,4926,1975,0,0.03,0.42,0.14,library,library,,1975
-Auditorium_Annex,Auditorium Annex Offices A,2431,1969,0,0,0,0,others,office,,1965
-Baseball_Training_Facility,Baseball Training Facility,1224,2015,0,0,0,0.05,recreational,recreational,,2015
-BC_Binning,B.C. Binning Studios,1501,1925,0.03,0.51,0,0.15,,lab,,1925
-Beaty,Beaty Biodiversity Centre,12466,2009,0,0.21,0,0.13,lab,lab,,2005
-Belkin_Art_Gallery,Morris and Helen Belkin Art Gallery,1504,1995,0,0,0,0.12,,others,,1995
-Bio_Sci_South,Biological Sciences Building - South Wing,5441,2011,0,0.42,0,0.14,lab,lab,,2010
-Bio_Sci_West,Biological Sciences Building - West Wing,8021,2011,0.04,0.36,0,0.1,lab,lab,,2010
-Biomed,Biomedical Research Centre,4407,1987,0,0.47,0,0.1,lab,lab,,1985
-Bookstore-NCE,Bookstore,10053,1983,0,0,0,0.03,,others,,1980
-Boulevard_Lot,MacInnes Field Underground Parkade,6168,2019,0,0,0,0,,parkade,,2015
-BRDF,Bioenergy Research and Demonstration Facility,2200,2012,0,0,0,0,,lab,,2010
-Brimacombe-QMI,The Brimacombe Building,13781,1995,0,0.28,0,0.05,lab,lab,,1995
-Brock_Hall,Brock Hall - West Wing,5907,1940,0,0,0,0.37,office,office,,1940
-Buchanan_ABC,"Buchanan A,B,C",10936,2007,0.31,0.04,0,0.18,classroom,classroom,,2005
-Buchanan_DE,"Buchanan D,E",7134,2007,0.28,0.01,0,0.25,classroom,classroom,,2005
-Buchanan_Tower,Buchanan Tower,10728,1972,0.03,0.01,0,0.4,office,office,,1970
-Campus_Energy_Centre,Campus Energy Centre,2000,2016,0,0,0,0,,others,,2015
-CCM,Centre for Comparative Medicine,10367,2011,0,0.52,0,0.06,office,office,,2010
-CEME,Civil and Mechanical Engineering Building,9361,1976,0.06,0.29,0,0.32,lab,lab,,1975
-CEME_Labs,Civil and Mechanical Engineering Laboratories,5636,1971,0.01,0.48,0,0.1,lab,lab,,1970
-Central,Central,7000,2019,0,0,0,0,,others,,2015
-Centre_for_Brain_Health,Djavad Mowafaghian Centre for Brain Health,15441,2014,0,0.14,0,0.2,,lab,,2010
-Chan_Centre,Chan Centre for The Performing Arts,11440,1997,0,0,0,0.02,recreational_others,recreational,,1995
-Chan_Gunn,Chan Gunn Centre,1806,2017,0,0,0,0,,others,,2015
-Chem_Bio,Chemical & Biological Engineering Building,14030,2005,0.06,0.33,0,0.15,lab,lab,,2005
-Chem_Centre,"Chemistry D Block, Centre Wing",7274,2008,0.06,0.37,0,0.16,lab,lab,,2005
-Chem_East,"Chemistry C Block, East Wing",3573,1963,0.07,0.49,0,0.03,lab,lab,,1960
-Chem_North,"Chemistry E Block, North Wing",2739,2006,0,0.53,0,0.09,lab,lab,,2005
-Chem_Phys,"Chemistry A Block, Chemistry Physics Building",7805,1989,0,0.45,0,0.16,lab,lab,,1985
-Chem_South,"Chemistry E Block, North Wing",5373,1959,0.1,0.42,0,0.09,lab,lab,,1955
-CICSR,"Institute for Computing, Information and Cognitive Systems / Computer Science Addition",9668,2005,0,0.47,0,0.16,,lab,,2005
-CIRS,Centre for Interactive Research on Sustainability [CIRS],5454,2011,0.08,0.04,0,0.27,office,office,,2010
-CK_Choi,C. K. Choi Building for The Institute of Asian Research,2912,1996,0.01,0.03,0,0.42,office,office,,1995
-Coal_&_Mineral,Coal and Mineral Processing Laboratory,2950,1981,0,0.44,0,0.03,,lab,,1980
-Continuing_Studies,Continuing Studies Building,3813,1997,0,0,0,0,,office,,1995
-Cunningham,George Cunningham Building,4901,1960,0,0,0,0.07,,office,,1960
-David_Lam,David Lam Management Research Centre,6751,1992,0.02,0.01,0.25,0.1,library,library,,1990
-Doug_Mitchell_Thunderbird_Sports_Centre,Doug Mitchell Thunderbird Sports Centre,25227,2008,0,0,0,0.06,,recreational,,2005
-EDC,Wayne and William White Engineering Design Centre,2645,2011,0,0.45,0,0.05,,lab,,2010
-EOS,Earth and Ocean Sciences  - Main,10799,1971,0.01,0.55,0,0.15,lab,lab,,1970
-ESB,Earth Sciences Building,17755,2012,0.06,0.22,0,0.25,office,office,,2010
-ESC,Engineering Student Centre,953,2015,0,0,0,0,,student,,2015
-Exchange_Residence,Exchange Residence,26165,2019,0,0,0,0,,residential,,2015
-FNH,"Food, Nutrition and Health Building",5962,1982,0.08,0.26,0,0.17,lab,lab,,1980
-Focal,Central,6750,2020,0,0,0,0,,others,,2020
-Forest_Sci,Forest Sciences Centre,22459,1998,0.07,0.31,0,0.17,,lab,,1995
-Frank_Forward,Frank Forward Building,7880,1968,0.06,0.29,0,0.22,lab,lab,,1965
-Fred_Kaiser,The Fred Kaiser Building,11798,2005,0,0.32,0,0.22,,lab,,2005
-Freddy_Wood_Theatre,Frederic Wood Theatre,2885,1968,0.02,0.13,0,0.07,,recreational,,1965
-Friedman,Friedman,6073,2008,0.01,0.23,0,0.16,lab,lab,,2005
-Gage_Res-All,Walter H. Gage Residence - All,46114,1972,0,0,0,0,,residential,,1970
-Gage_Res-South,Walter H. Gage Residence - South Tower,9772,2019,0,0,0,0,,residential,,2015
-Geography,Geography Building,5525,1925,0.17,0.22,0,0.35,classroom,classroom,,1925
-Green_College,Green College (All),5551,1930,0,0,0,0.02,,classroom,,1930
-Hebb,Hebb Building,5991,1964,0.15,0.43,0,0.08,lab,lab,,1960
-Hennings,Hennings Building,11428,1945,0.09,0.34,0,0.23,lab,lab,,1945
-Henry_Angus,Henry Angus Building,16922,1965,0.11,0.01,0,0.42,classroom,classroom,,1965
-HR_Macmillan,H. R. Macmillan Building,14193,1967,0.07,0.28,0,0.19,lab,lab,,1965
-ICICS,"Institute for Computing, Information and Cognitive Systems / Computer Science",10012,1993,0,0.28,0,0.3,lab,lab,,1990
-IK_Barber,Irving K. Barber Learning Centre,27316,2007,0.05,0.01,0.43,0.12,library,library,,2005
-International_House,International House,1246,1958,0,0,0,0.34,,office,,1955
-IRSDC,Indian Residential School History and Dialogue Centre,399,2017,0,0,0,0,,lab,,2015
-Jack_Bell,Jack Bell Building for The School of Social Work,2712,1992,0.14,0.05,0.38,0,,library,,1990
-JB_MacDonald,J. B. Macdonald Building,7328,2010,0.02,0.2,0,0.28,office,office,,2010
-Kenny,Douglas Kenny Building,9613,1983,0.02,0.31,0,0.16,lab,lab,,1980
-Klinck,The Leonard S. Klinck Building,10720,1947,0.11,0.02,0,0.33,classroom,classroom,,1945
-Koerner_Library,Sedgewick Library,7303,1996,0,0,0.29,0.12,library,library,,1995
-Lasserre,Frederic Lasserre Building,4710,1962,0.16,0.23,0,0.25,classroom,classroom,,1960
-Life_Building,UBC Life Building,19026,1968,0,0,0,0,recreational_others,student,,1965
-Life_Sci,Life Sciences Centre,52177,2004,0.04,0.39,0,0.13,lab,lab,,2000
-Liu,Liu Institute for Global Issues,1729,2000,0,0,0.53,0,office,library,,2000
-LMRS,Lower Mall Research Station,6406,1960,0,0,0,0,lab,lab,,1960
-Longhouse,First Nations Longhouse,2352,1993,0,0,0.09,0.34,office,office,,1990
-MacLeod,Macleod Building,7345,1963,0.11,0.44,0,0.09,lab,lab,,1960
-Mary_Bollert_Hall,Mary Bollert Hall,1318,1950,0,0.02,0,0.45,,office,,1950
-Mathematics,Mathematics Building,6140,1925,0.15,0,0,0.28,classroom,classroom,,1925
-MEDC,Medical Science Block C,4014,1961,0.02,0.35,0,0.15,lab,lab,,1960
-Michael_Smith,Michael Smith Laboratories,8477,2004,0.03,0.41,0,0.15,,lab,,2000
-MOA,Museum of Anthropology,10652,2010,0,0.05,0,0.08,recreational_others,recreational,,2010
-Music,Music Building,6593,1967,0.01,0.13,0,0.25,,office,,1965
-Neville_Scarfe,Neville Scarfe,19382,1962,0.12,0.02,0.15,0.19,classroom,classroom,,1960
-NSDC,National Soccer Development Centre (NSDC),3714,2017,0,0,0,0,,recreational,,2015
-Old_Auditorium,Old Auditorium,2634,1925,0.02,0.14,0,0.18,,recreational,,1925
-Orchard_Commons,Orchard Commons,39838,2016,0.04,0,0,0.03,,residential,,2015
-Osborne,Robert F. Osborne Centre - Unit 2,2740,1970,0,0.77,0,0.07,,lab,,1970
-Parc_Library,Parc Library,2146,2015,0,0,0.7,0,,library,,2015
-Pharmacy,Pharmaceutical Sciences & Centre for Drug Research and Development,36138,2012,0.04,0.17,0,0.13,,lab,,2010
-Ponderosa_East,Ponderosa Commons: Audain Art Centre / Spruce House,11080,2013,0,0.18,0,0.05,,residential,,2010
-Ponderosa_North,Ponderosa Commons: Cedar House / Oak House,26516,2015,0.02,0.01,0,0.05,,residential,,2015
-Ponderosa_West,Ponderosa Commons: Maple House / Arbutus House,17402,2013,0,0.03,0,0,,residential,,2010
-Pulp_&_Paper,Pulp and Paper Centre,3676,1985,0,0.33,0,0.25,,lab,,1985
-Ritsumeikan-UBC_House,Ritsumeikan-UBC House,6763,1992,0,0,0,0,,residential,,1990
-Sing_Tao,Sing Tao Building,1571,1997,0.09,0.15,0,0.24,,office,,1995
-SPPH,School of Population & Public Health,8442,1979,0.05,0.06,0,0.48,office,office,,1975
-Strangway,David Strangway Building,12403,2005,0,0,0,0.25,lab,office,,2005
-Student_Recreation_Centre,Student Recreation Centre,4963,1995,0,0,0,0.03,,recreational,,1995
-Swing_Space,West Mall Swing Space Building,5399,2005,0.53,0,0,0.02,,classroom,,2005
-Tall_Wood_House,Tall Wood House,15204,2017,0,0,0,0,,residential,,2015
-Thea_Koerner_House,Thea Koerner House,4061,1961,0,0,0,0,,student,,1960
-Totem_Cesnaem,Totem Cesnaem,9411,2017,0,0,0,0.2,,others,,2015
-Totem_Park_Res-Coquihala_CommonMagda,Totem Park Residence - Coquihala Common Block/Magda's Convenience Store,4664,1964,0,0,0,0.02,,residential,,1960
-Totem_Park_Res-DeneNootka,Totem Park Residence - Dene House/Nootka House,9014,1964,0,0,0,0,,residential,,1960
-Totem_Park_Res-HaidaSalish,Totem Park Residence - Haida House/Salish House,8666,1964,0,0,0,0,,residential,,1960
-Totem_Park_Res-KwakiutlShuswap,Totem Park Residence - Kwakiutl House/Shuswap House,9027,1968,0,0,0,0,,residential,,1965
-Totem_Park_Res-QelexenHemlesen,Totem Park Res - Qelexen/Hemlesen House,16559,2011,0,0,0,0,,residential,,2010
-UBC_Tennis_Centre,UBC Tennis Centre (New),8252,2011,0,0,0,0,,recreational,,2010
-ULTL,Undergraduate Life Sciences Teaching Labs,9069,2019,0,0,0,0,,lab,,2015
-University_Centre,Leon and Thea Koerner University Centre,3944,1958,0.11,0,0,0.19,,office,,1955
-USB,University Services Building,11598,1992,0,0,0,0.2,office,office,,1990
-Vanier-Aldyen_Hamber,Place Vanier Residence - Aldyen Hamber House,2114,1960,0,0,0,0,,residential,,1960
-Vanier-Cariboo,Place Vanier Residence - Cariboo House,2172,1968,0,0,0,0,,residential,,1965
-Vanier-Gordon_Shrum,Place Vanier Residence - Gordon Shrum Common Block,4881,1960,0,0,0,0.01,,residential,,1960
-Vanier-Kootenay,Place Vanier Residence - Kootenay House,2122,1961,0,0,0,0,,residential,,1960
-Vanier-Mackenzie,Place Vanier Residence - Margaret Mackenzie House,2114,1960,0,0,0,0,,residential,,1960
-Vanier-Mawdsley,Place Vanier Residence - Dorothy Mawdsley House,2142,1960,0,0,0,0,,residential,,1960
-Vanier-Phyllis_Ross,Place Vanier Residence - Phyllis Ross House,2142,1960,0,0,0,0,,residential,,1960
-Vanier-Robson,Place Vanier Residence - Robson House,2115,1959,0,0,0,0,,residential,,1955
-Vanier-Sherwood_Lett,Place Vanier Residence - Sherwood Lett House,2112,1959,0,0,0,0,,residential,,1955
-Vanier-Tweedsmuir,Place Vanier Residence - Tweedsmuir House,2189,1968,0,0,0,0,,residential,,1965
-War_Memorial_Gymnasium,War Memorial Gymnasium,8945,1950,0.01,0.06,0,0.1,recreational_others,recreational,,1950
-Wesbrook_Building,Wesbrook Building,10272,1949,0.06,0.29,0,0.08,,lab,,1945
-West_Mall_Annex,West Mall Annex,1962,1969,0.1,0.15,0,0.51,,office,,1965
-Woodward_IRC,P. A. Woodward Instructional Resources Centre,12049,1972,0.08,0.01,0,0.15,classroom,classroom,,1970
-Woodward_Library,Woodward Biomedical Library,7777,2010,0,0,0.43,0,library,library,,2010
+AERL,Aquatic Ecosystems Research Laboratory,5368,2005,0.06,0.05,0,0.46,office,office,5001-7000,2000 to 2009
+Allard_Hall,Allard Hall,14909,2011,0.08,0,0.2,0.2,office,office,"11,001-15,000",2010 to 2014
+Alumni_Centre,Robert H Lee Alumni Centre,4106,2015,0,0,0,0.18,,office,3001-5000,2010 to 2014
+AMS_Nest,AMS Student Nest,22933,2015,0,0,0,0.07,,student,">20,000",2010 to 2014
+Ansoc,Anthropology and Sociology Building,6220,1950,0.07,0.1,0,0.356,office,office,5001-7000,1946 to 1959
+Aquatic_Centre,Aquatic Centre,8041,2017,0,0,0,0,recreational,recreational,7001-9000,After 2015
+Asian_Centre,Asian Centre,4926,1975,0,0.03,0.42,0.14,library,library,3001-5000,1970 to 1979
+Auditorium_Annex,Auditorium Annex Offices A,2431,1969,0,0,0,0,others,office,2000-3000,1960 to 1969
+Baseball_Training_Facility,Baseball Training Facility,1224,2015,0,0,0,0.05,recreational,recreational,<2000,2010 to 2014
+BC_Binning,B.C. Binning Studios,1501,1925,0.03,0.51,0,0.15,,lab,<2000,before 1945
+Beaty,Beaty Biodiversity Centre,12466,2009,0,0.21,0,0.13,lab,lab,"11,001-15,000",2000 to 2009
+Belkin_Art_Gallery,Morris and Helen Belkin Art Gallery,1504,1995,0,0,0,0.12,,others,<2000,1990 to 1999
+Bio_Sci_South,Biological Sciences Building - South Wing,5441,2011,0,0.42,0,0.14,lab,lab,5001-7000,2010 to 2014
+Bio_Sci_West,Biological Sciences Building - West Wing,8021,2011,0.04,0.36,0,0.1,lab,lab,7001-9000,2010 to 2014
+Biomed,Biomedical Research Centre,4407,1987,0,0.47,0,0.1,lab,lab,3001-5000,1980 to 1989
+Bookstore-NCE,Bookstore,10053,1983,0,0,0,0.03,,others,"9001-11,000",1980 to 1989
+Boulevard_Lot,MacInnes Field Underground Parkade,6168,2019,0,0,0,0,,parkade,5001-7000,After 2015
+BRDF,Bioenergy Research and Demonstration Facility,2200,2012,0,0,0,0,,lab,2000-3000,2010 to 2014
+Brimacombe-QMI,The Brimacombe Building,13781,1995,0,0.28,0,0.05,lab,lab,"11,001-15,000",1990 to 1999
+Brock_Hall,Brock Hall - West Wing,5907,1940,0,0,0,0.37,office,office,5001-7000,before 1945
+Buchanan_ABC,"Buchanan A,B,C",10936,2007,0.31,0.04,0,0.18,classroom,classroom,"9001-11,000",2000 to 2009
+Buchanan_DE,"Buchanan D,E",7134,2007,0.28,0.01,0,0.25,classroom,classroom,7001-9000,2000 to 2009
+Buchanan_Tower,Buchanan Tower,10728,1972,0.03,0.01,0,0.4,office,office,"9001-11,000",1970 to 1979
+Campus_Energy_Centre,Campus Energy Centre,2000,2016,0,0,0,0,,others,<2000,After 2015
+CCM,Centre for Comparative Medicine,10367,2011,0,0.52,0,0.06,office,office,"9001-11,000",2010 to 2014
+CEME,Civil and Mechanical Engineering Building,9361,1976,0.06,0.29,0,0.32,lab,lab,"9001-11,000",1970 to 1979
+CEME_Labs,Civil and Mechanical Engineering Laboratories,5636,1971,0.01,0.48,0,0.1,lab,lab,5001-7000,1970 to 1979
+Central,Central,7000,2019,0,0,0,0,,others,5001-7000,After 2015
+Centre_for_Brain_Health,Djavad Mowafaghian Centre for Brain Health,15441,2014,0,0.14,0,0.2,,lab,"15,001-22,000",2010 to 2014
+Chan_Centre,Chan Centre for The Performing Arts,11440,1997,0,0,0,0.02,recreational_others,recreational,"11,001-15,000",1990 to 1999
+Chan_Gunn,Chan Gunn Centre,1806,2017,0,0,0,0,,others,<2000,After 2015
+Chem_Bio,Chemical & Biological Engineering Building,14030,2005,0.06,0.33,0,0.15,lab,lab,"11,001-15,000",2000 to 2009
+Chem_Centre,"Chemistry D Block, Centre Wing",7274,2008,0.06,0.37,0,0.16,lab,lab,7001-9000,2000 to 2009
+Chem_East,"Chemistry C Block, East Wing",3573,1963,0.07,0.49,0,0.03,lab,lab,3001-5000,1960 to 1969
+Chem_North,"Chemistry E Block, North Wing",2739,2006,0,0.53,0,0.09,lab,lab,2000-3000,2000 to 2009
+Chem_Phys,"Chemistry A Block, Chemistry Physics Building",7805,1989,0,0.45,0,0.16,lab,lab,7001-9000,1980 to 1989
+Chem_South,"Chemistry E Block, North Wing",5373,1959,0.1,0.42,0,0.09,lab,lab,5001-7000,1946 to 1959
+CICSR,"Institute for Computing, Information and Cognitive Systems / Computer Science Addition",9668,2005,0,0.47,0,0.16,,lab,"9001-11,000",2000 to 2009
+CIRS,Centre for Interactive Research on Sustainability [CIRS],5454,2011,0.08,0.04,0,0.27,office,office,5001-7000,2010 to 2014
+CK_Choi,C. K. Choi Building for The Institute of Asian Research,2912,1996,0.01,0.03,0,0.42,office,office,2000-3000,1990 to 1999
+Coal_&_Mineral,Coal and Mineral Processing Laboratory,2950,1981,0,0.44,0,0.03,,lab,2000-3000,1980 to 1989
+Continuing_Studies,Continuing Studies Building,3813,1997,0,0,0,0,,office,3001-5000,1990 to 1999
+Cunningham,George Cunningham Building,4901,1960,0,0,0,0.07,,office,3001-5000,1960 to 1969
+David_Lam,David Lam Management Research Centre,6751,1992,0.02,0.01,0.25,0.1,library,library,5001-7000,1990 to 1999
+Doug_Mitchell_Thunderbird_Sports_Centre,Doug Mitchell Thunderbird Sports Centre,25227,2008,0,0,0,0.06,,recreational,">20,000",2000 to 2009
+EDC,Wayne and William White Engineering Design Centre,2645,2011,0,0.45,0,0.05,,lab,2000-3000,2010 to 2014
+EOS,Earth and Ocean Sciences  - Main,10799,1971,0.01,0.55,0,0.15,lab,lab,"9001-11,000",1970 to 1979
+ESB,Earth Sciences Building,17755,2012,0.06,0.22,0,0.25,office,office,"15,001-22,000",2010 to 2014
+ESC,Engineering Student Centre,953,2015,0,0,0,0,,student,<2000,2010 to 2014
+Exchange_Residence,Exchange Residence,26165,2019,0,0,0,0,,residential,">20,000",After 2015
+FNH,"Food, Nutrition and Health Building",5962,1982,0.08,0.26,0,0.17,lab,lab,5001-7000,1980 to 1989
+Focal,Central,6750,2020,0,0,0,0,,others,5001-7000,After 2015
+Forest_Sci,Forest Sciences Centre,22459,1998,0.07,0.31,0,0.17,,lab,">20,000",1990 to 1999
+Frank_Forward,Frank Forward Building,7880,1968,0.06,0.29,0,0.22,lab,lab,7001-9000,1960 to 1969
+Fred_Kaiser,The Fred Kaiser Building,11798,2005,0,0.32,0,0.22,,lab,"11,001-15,000",2000 to 2009
+Freddy_Wood_Theatre,Frederic Wood Theatre,2885,1968,0.02,0.13,0,0.07,,recreational,2000-3000,1960 to 1969
+Friedman,Friedman,6073,2008,0.01,0.23,0,0.16,lab,lab,5001-7000,2000 to 2009
+Gage_Res-All,Walter H. Gage Residence - All,46114,1972,0,0,0,0,,residential,">20,000",1970 to 1979
+Gage_Res-South,Walter H. Gage Residence - South Tower,9772,2019,0,0,0,0,,residential,"9001-11,000",After 2015
+Geography,Geography Building,5525,1925,0.17,0.22,0,0.35,classroom,classroom,5001-7000,before 1945
+Green_College,Green College (All),5551,1930,0,0,0,0.02,,classroom,5001-7000,before 1945
+Hebb,Hebb Building,5991,1964,0.15,0.43,0,0.08,lab,lab,5001-7000,1960 to 1969
+Hennings,Hennings Building,11428,1945,0.09,0.34,0,0.23,lab,lab,"11,001-15,000",before 1945
+Henry_Angus,Henry Angus Building,16922,1965,0.11,0.01,0,0.42,classroom,classroom,"15,001-22,000",1960 to 1969
+HR_Macmillan,H. R. Macmillan Building,14193,1967,0.07,0.28,0,0.19,lab,lab,"11,001-15,000",1960 to 1969
+ICICS,"Institute for Computing, Information and Cognitive Systems / Computer Science",10012,1993,0,0.28,0,0.3,lab,lab,"9001-11,000",1990 to 1999
+IK_Barber,Irving K. Barber Learning Centre,27316,2007,0.05,0.01,0.43,0.12,library,library,">20,000",2000 to 2009
+International_House,International House,1246,1958,0,0,0,0.34,,office,<2000,1946 to 1959
+IRSDC,Indian Residential School History and Dialogue Centre,399,2017,0,0,0,0,,lab,<2000,After 2015
+Jack_Bell,Jack Bell Building for The School of Social Work,2712,1992,0.14,0.05,0.38,0,,library,2000-3000,1990 to 1999
+JB_MacDonald,J. B. Macdonald Building,7328,2010,0.02,0.2,0,0.28,office,office,7001-9000,2010 to 2014
+Kenny,Douglas Kenny Building,9613,1983,0.02,0.31,0,0.16,lab,lab,"9001-11,000",1980 to 1989
+Klinck,The Leonard S. Klinck Building,10720,1947,0.11,0.02,0,0.33,classroom,classroom,"9001-11,000",1946 to 1959
+Koerner_Library,Sedgewick Library,7303,1996,0,0,0.29,0.12,library,library,7001-9000,1990 to 1999
+Lasserre,Frederic Lasserre Building,4710,1962,0.16,0.23,0,0.25,classroom,classroom,3001-5000,1960 to 1969
+Life_Building,UBC Life Building,19026,1968,0,0,0,0,recreational_others,student,"15,001-22,000",1960 to 1969
+Life_Sci,Life Sciences Centre,52177,2004,0.04,0.39,0,0.13,lab,lab,">20,000",2000 to 2009
+Liu,Liu Institute for Global Issues,1729,2000,0,0,0.53,0,office,library,<2000,2000 to 2009
+LMRS,Lower Mall Research Station,6406,1960,0,0,0,0,lab,lab,5001-7000,1960 to 1969
+Longhouse,First Nations Longhouse,2352,1993,0,0,0.09,0.34,office,office,2000-3000,1990 to 1999
+MacLeod,Macleod Building,7345,1963,0.11,0.44,0,0.09,lab,lab,7001-9000,1960 to 1969
+Mary_Bollert_Hall,Mary Bollert Hall,1318,1950,0,0.02,0,0.45,,office,<2000,1946 to 1959
+Mathematics,Mathematics Building,6140,1925,0.15,0,0,0.28,classroom,classroom,5001-7000,before 1945
+MEDC,Medical Science Block C,4014,1961,0.02,0.35,0,0.15,lab,lab,3001-5000,1960 to 1969
+Michael_Smith,Michael Smith Laboratories,8477,2004,0.03,0.41,0,0.15,,lab,7001-9000,2000 to 2009
+MOA,Museum of Anthropology,10652,2010,0,0.05,0,0.08,recreational_others,recreational,"9001-11,000",2010 to 2014
+Music,Music Building,6593,1967,0.01,0.13,0,0.25,,office,5001-7000,1960 to 1969
+Neville_Scarfe,Neville Scarfe,19382,1962,0.12,0.02,0.15,0.19,classroom,classroom,"15,001-22,000",1960 to 1969
+NSDC,National Soccer Development Centre (NSDC),3714,2017,0,0,0,0,,recreational,3001-5000,After 2015
+Old_Auditorium,Old Auditorium,2634,1925,0.02,0.14,0,0.18,,recreational,2000-3000,before 1945
+Orchard_Commons,Orchard Commons,39838,2016,0.04,0,0,0.03,,residential,">20,000",After 2015
+Osborne,Robert F. Osborne Centre - Unit 2,2740,1970,0,0.77,0,0.07,,lab,2000-3000,1970 to 1979
+Parc_Library,Parc Library,2146,2015,0,0,0.7,0,,library,2000-3000,2010 to 2014
+Pharmacy,Pharmaceutical Sciences & Centre for Drug Research and Development,36138,2012,0.04,0.17,0,0.13,,lab,">20,000",2010 to 2014
+Ponderosa_East,Ponderosa Commons: Audain Art Centre / Spruce House,11080,2013,0,0.18,0,0.05,,residential,"11,001-15,000",2010 to 2014
+Ponderosa_North,Ponderosa Commons: Cedar House / Oak House,26516,2015,0.02,0.01,0,0.05,,residential,">20,000",2010 to 2014
+Ponderosa_West,Ponderosa Commons: Maple House / Arbutus House,17402,2013,0,0.03,0,0,,residential,"15,001-22,000",2010 to 2014
+Pulp_&_Paper,Pulp and Paper Centre,3676,1985,0,0.33,0,0.25,,lab,3001-5000,1980 to 1989
+Ritsumeikan-UBC_House,Ritsumeikan-UBC House,6763,1992,0,0,0,0,,residential,5001-7000,1990 to 1999
+Sing_Tao,Sing Tao Building,1571,1997,0.09,0.15,0,0.24,,office,<2000,1990 to 1999
+SPPH,School of Population & Public Health,8442,1979,0.05,0.06,0,0.48,office,office,7001-9000,1970 to 1979
+Strangway,David Strangway Building,12403,2005,0,0,0,0.25,lab,office,"11,001-15,000",2000 to 2009
+Student_Recreation_Centre,Student Recreation Centre,4963,1995,0,0,0,0.03,,recreational,3001-5000,1990 to 1999
+Swing_Space,West Mall Swing Space Building,5399,2005,0.53,0,0,0.02,,classroom,5001-7000,2000 to 2009
+Tall_Wood_House,Tall Wood House,15204,2017,0,0,0,0,,residential,"15,001-22,000",After 2015
+Thea_Koerner_House,Thea Koerner House,4061,1961,0,0,0,0,,student,3001-5000,1960 to 1969
+Totem_Cesnaem,Totem Cesnaem,9411,2017,0,0,0,0.2,,others,"9001-11,000",After 2015
+Totem_Park_Res-Coquihala_CommonMagda,Totem Park Residence - Coquihala Common Block/Magda's Convenience Store,4664,1964,0,0,0,0.02,,residential,3001-5000,1960 to 1969
+Totem_Park_Res-DeneNootka,Totem Park Residence - Dene House/Nootka House,9014,1964,0,0,0,0,,residential,"9001-11,000",1960 to 1969
+Totem_Park_Res-HaidaSalish,Totem Park Residence - Haida House/Salish House,8666,1964,0,0,0,0,,residential,7001-9000,1960 to 1969
+Totem_Park_Res-KwakiutlShuswap,Totem Park Residence - Kwakiutl House/Shuswap House,9027,1968,0,0,0,0,,residential,"9001-11,000",1960 to 1969
+Totem_Park_Res-QelexenHemlesen,Totem Park Res - Qelexen/Hemlesen House,16559,2011,0,0,0,0,,residential,"15,001-22,000",2010 to 2014
+UBC_Tennis_Centre,UBC Tennis Centre (New),8252,2011,0,0,0,0,,recreational,7001-9000,2010 to 2014
+ULTL,Undergraduate Life Sciences Teaching Labs,9069,2019,0,0,0,0,,lab,"9001-11,000",After 2015
+University_Centre,Leon and Thea Koerner University Centre,3944,1958,0.11,0,0,0.19,,office,3001-5000,1946 to 1959
+USB,University Services Building,11598,1992,0,0,0,0.2,office,office,"11,001-15,000",1990 to 1999
+Vanier-Aldyen_Hamber,Place Vanier Residence - Aldyen Hamber House,2114,1960,0,0,0,0,,residential,2000-3000,1960 to 1969
+Vanier-Cariboo,Place Vanier Residence - Cariboo House,2172,1968,0,0,0,0,,residential,2000-3000,1960 to 1969
+Vanier-Gordon_Shrum,Place Vanier Residence - Gordon Shrum Common Block,4881,1960,0,0,0,0.01,,residential,3001-5000,1960 to 1969
+Vanier-Kootenay,Place Vanier Residence - Kootenay House,2122,1961,0,0,0,0,,residential,2000-3000,1960 to 1969
+Vanier-Mackenzie,Place Vanier Residence - Margaret Mackenzie House,2114,1960,0,0,0,0,,residential,2000-3000,1960 to 1969
+Vanier-Mawdsley,Place Vanier Residence - Dorothy Mawdsley House,2142,1960,0,0,0,0,,residential,2000-3000,1960 to 1969
+Vanier-Phyllis_Ross,Place Vanier Residence - Phyllis Ross House,2142,1960,0,0,0,0,,residential,2000-3000,1960 to 1969
+Vanier-Robson,Place Vanier Residence - Robson House,2115,1959,0,0,0,0,,residential,2000-3000,1946 to 1959
+Vanier-Sherwood_Lett,Place Vanier Residence - Sherwood Lett House,2112,1959,0,0,0,0,,residential,2000-3000,1946 to 1959
+Vanier-Tweedsmuir,Place Vanier Residence - Tweedsmuir House,2189,1968,0,0,0,0,,residential,2000-3000,1960 to 1969
+War_Memorial_Gymnasium,War Memorial Gymnasium,8945,1950,0.01,0.06,0,0.1,recreational_others,recreational,7001-9000,1946 to 1959
+Wesbrook_Building,Wesbrook Building,10272,1949,0.06,0.29,0,0.08,,lab,"9001-11,000",1946 to 1959
+West_Mall_Annex,West Mall Annex,1962,1969,0.1,0.15,0,0.51,,office,<2000,1960 to 1969
+Woodward_IRC,P. A. Woodward Instructional Resources Centre,12049,1972,0.08,0.01,0,0.15,classroom,classroom,"11,001-15,000",1970 to 1979
+Woodward_Library,Woodward Biomedical Library,7777,2010,0,0,0.43,0,library,library,7001-9000,2010 to 2014

@@ -98,6 +98,43 @@ def generate_multi_level_sankey_elements(query_result, metric_list,
     return element_dict
 
 
+def generate_sankey_building_elements(query_result,
+                                      metric_list,
+                                      building_metadata,
+                                      color_dict):
+
+    building_list = building_metadata.building.unique()
+    # Initialize lists
+    element_dict = {'labels': np.append(metric_list, building_list),
+                    'sources': [],
+                    'targets': [],
+                    'values': [],
+                    'color_nodes': [],
+                    'color_links': []}
+
+    for metric in metric_list:
+        element_dict['color_nodes'].append(color_dict['node'][metric])
+        for building in building_list:
+
+            temp_df = (query_result[metric].loc[:,
+                       query_result[metric].columns == building])
+
+            if len(temp_df) > 0:
+                element_dict['values'].append(temp_df.sum(axis=1)[0])
+
+                element_dict['sources'].append(np.where(
+                    element_dict['labels'] == metric)[0][0])
+
+                element_dict['targets'].append(np.where(
+                    element_dict['labels'] == building)[0][0])
+
+                element_dict['color_links'].append(color_dict['link'][metric])
+    for i in range(len(element_dict['labels'])-3):
+        element_dict['color_nodes'].append(color_dict['node']['Others'])
+
+    return element_dict
+
+
 def generate_influx_query(influx_client, start_date, end_date, metric_list):
 
     where_parameters = {'t0': start_date,
@@ -120,7 +157,8 @@ def generate_influx_query(influx_client, start_date, end_date, metric_list):
 def generate_sankey(query_result, metric_list,
                     building_metadata, color_dict,
                     cluster_type='building_type_mod',
-                    is_multi_level=True):
+                    is_multi_level=True,
+                    is_building=False,):
 
     if is_multi_level:
         element_dict = generate_multi_level_sankey_elements(query_result=query_result,
@@ -129,6 +167,11 @@ def generate_sankey(query_result, metric_list,
                                                             building_metadata=building_metadata,
                                                             color_dict=color_dict
                                                             )
+    elif is_building:
+        element_dict = generate_sankey_building_elements(query_result=query_result,
+                                                         metric_list=metric_list,
+                                                         building_metadata=building_metadata,
+                                                         color_dict=color_dict)
     else:
         element_dict = generate_sankey_elements(query_result=query_result,
                                                 metric_list=metric_list,
