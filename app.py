@@ -224,7 +224,5 @@ def generate_building_list_from_cluster_selection(cluster_selection, cluster_typ
 # TODO Generate Graph when comparing 2 dates
 
 
-
-
 if __name__ == '__main__':
     app.run_server(debug=True)
