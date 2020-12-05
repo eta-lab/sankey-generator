@@ -12,7 +12,7 @@ import utilities
 # Stylesheet from plotly website
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__)
 app.title = "ETA Lab Sankey Generator"
 
 building_metadata = pd.read_csv("./metadata/BuildingMetadataAll.csv")
@@ -22,13 +22,14 @@ influx_client = DataFrameClient(host='206.12.88.106', port=8086,
                                 username='root', password='root',
                                 database='cpsc-sankey')
 
-color_dict = {'node': {'Elec': 'rgba(245, 230, 66, 1.0)',
-                       'HotWater': 'rgba(17, 5, 240, 1.0)',
-                       'Gas': 'rgba(0, 163, 65, 1.0)',
-                       'Others': 'rgba(0, 247, 255, 1.0)'},
-              'link': {'Elec': 'rgba(245, 230, 66, 0.2)',
-                       'HotWater': 'rgba(17, 5, 240, 0.2)',
-                       'Gas': ' rgba(0, 163, 65, 0.2)'}}
+color_dict = {'node': {'Elec': 'rgba(205, 52, 181, 1.0)',
+                       'HotWater': 'rgba(255, 177, 78, 1.0)',
+                       'Gas': 'rgba(0, 0, 255, 1.0)',
+                       'cluster': 'rgba(177, 177, 177, 1.0)',
+                       'building': 'rgba(85, 85, 85, 1.0)'},
+              'link': {'Elec': 'rgba(205, 52, 181, 0.2)',
+                       'HotWater': 'rgba(255, 177, 78, 0.2)',
+                       'Gas': ' rgba(0, 0, 255, 0.2)'}}
 
 metric_dict = {"ref": ['Elec', 'Gas', 'HotWater'],
                "label": ['Electricity', 'Gas', 'Hot Water']}
@@ -56,6 +57,7 @@ app.layout = html.Div([
                          searchable=False,
                          placeholder='Select cluster type',
                          value='building_type_mod',
+                         clearable=False,
                          style={'margin-bottom': '10px', 'margin-top': '10px'})
             ,
             dcc.Dropdown(id='cluster-selection-campus',
@@ -80,6 +82,8 @@ app.layout = html.Div([
                     start_date=default_start_date,
                     end_date=default_end_date,
                     initial_visible_month=initial_date,
+                    with_portal=True,
+                    number_of_months_shown=3,
                     style={'margin-bottom': '30px'})
             ,
             dcc.Checklist(
@@ -127,7 +131,7 @@ def generate_cluster_list_campus(cluster_type):
     cluster_list = building_metadata[cluster_type].unique()
 
     if len(cluster_list) > 0:
-        options = utilities.generate_option_array_from_list(cluster_list)
+        options = utilities.generate_option_array_from_list(np.sort(cluster_list))
 
     else:
         options = [{'label': 'Not Found', 'value': 'nan'}]

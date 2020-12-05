@@ -47,7 +47,7 @@ def generate_sankey_elements(query_result, metric_dict,
                 element_dict['color_links'].append(color_dict['link'][metric])
 
     for i in range(len(element_dict['labels'])-3):
-        element_dict['color_nodes'].append(color_dict['node']['Others'])
+        element_dict['color_nodes'].append(color_dict['node']['cluster'])
 
     for i in range(len(element_dict['labels'])):
         element = element_dict['labels'][i]
@@ -125,8 +125,13 @@ def generate_multi_level_sankey_elements(query_result, metric_dict,
 
                     element_dict['color_links'].append(color_dict['link'][metric])
 
-    for i in range(len(element_dict['labels'])-3):
-        element_dict['color_nodes'].append(color_dict['node']['Others'])
+    for i in range(len(metric_list),len(element_dict['labels'])):
+        element = element_dict['labels'][i]
+        if element in cluster_list:
+            color = color_dict['node']['cluster']
+        else:
+            color = color_dict['node']['building']
+        element_dict['color_nodes'].append(color)
 
     for i in range(len(element_dict['labels'])):
         element = element_dict['labels'][i]
@@ -186,7 +191,7 @@ def generate_sankey_building_elements(query_result,
 
                 element_dict['color_links'].append(color_dict['link'][metric])
     for i in range(len(element_dict['labels'])-3):
-        element_dict['color_nodes'].append(color_dict['node']['Others'])
+        element_dict['color_nodes'].append(color_dict['node']['building'])
 
     for i in range(len(element_dict['labels'])):
         element = element_dict['labels'][i]
@@ -253,14 +258,17 @@ def generate_sankey(query_result, metric_dict,
 
     sankey_figure = go.Figure(
         data=[go.Sankey(
+            valuesuffix=" kWh",
             node=dict(
                 pad=15,
                 thickness=20,
+
                 line=dict(color="black", width=0.5),
                 label=element_dict['labels_display'],
                 color=element_dict['color_nodes'],
                 customdata=element_dict['normalized_values'],
-                hovertemplate=' %{label} total = %{customdata} kWh/m2'
+                hovertemplate=(' Total energy = %{value}<br />'
+                               ' EUI = %{customdata} kWh/m2')
             ),
             link=dict(
                 source=element_dict['sources'],  # indices correspond to labels, eg A1, A2, A2, B1, ...
