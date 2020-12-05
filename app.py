@@ -30,7 +30,10 @@ color_dict = {'node': {'Elec': 'rgba(245, 230, 66, 1.0)',
                        'HotWater': 'rgba(17, 5, 240, 0.2)',
                        'Gas': ' rgba(0, 163, 65, 0.2)'}}
 
-metric_list = ['Elec', 'Gas', 'HotWater']
+metric_dict = {"ref": ['Elec', 'Gas', 'HotWater'],
+               "label": ['Electricity', 'Gas', 'Hot Water']}
+
+metric_list = metric_dict['ref']
 
 default_start_date = "2020-10-01T00:00:00Z"
 default_end_date = "2020-10-31T23:59:59Z"
@@ -161,13 +164,14 @@ def generate_campus_sankey(cluster_type,
         is_multi_level = False
         metadata = building_metadata
         is_building = False
+
     query_result = generate_graph.generate_influx_query(influx_client,
                                                         start_date,
                                                         end_date,
-                                                        metric_list)
+                                                        metric_dict)
 
     sankey_figure = generate_graph.generate_sankey(query_result,
-                                                   metric_list,
+                                                   metric_dict,
                                                    metadata,
                                                    color_dict,
                                                    cluster_type,
@@ -207,7 +211,8 @@ def generate_building_list_from_cluster_selection(cluster_selection, cluster_typ
         disabled = False
         building_list = building_metadata.loc[
             building_metadata[cluster_type].isin(cluster_selection),
-            'building']
+            ['building', 'long_name']]
+
         options_building = utilities.generate_option_array_from_list(building_list)
     else:
         disabled = True
@@ -217,13 +222,6 @@ def generate_building_list_from_cluster_selection(cluster_selection, cluster_typ
 
 # Show or hide campus selection
 # TODO Generate Graph when comparing 2 dates
-
-
-
-# TODO Update the metadata file
-# TODO Hover for normalised data
-# TODO Hover for full name of building
-# TODO Full label for the graphs
 
 
 

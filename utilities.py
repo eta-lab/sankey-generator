@@ -17,7 +17,14 @@ def generate_top_n_df(df, n):
 
 def generate_option_array_from_list(list_of_options):
     options = []
-    for option in list_of_options:
-        temps_dict = {'label': option, 'value': option}
-        options.append(temps_dict)
+
+    if len(list_of_options.shape) == 1:
+        for option in list_of_options:
+            temp_dict = {'label': option, 'value': option}
+            options.append(temp_dict)
+    else:
+        for i in range(len(list_of_options)):
+            temp_dict = {'label': list_of_options.iloc[i, 1],
+                         'value': list_of_options.iloc[i, 0]}
+            options.append(temp_dict)
     return options
