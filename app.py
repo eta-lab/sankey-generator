@@ -14,6 +14,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__)
 app.title = "ETA Lab Sankey Generator"
+server = app.server
 
 building_metadata = pd.read_csv("./metadata/BuildingMetadataAll.csv")
 sensor_metadata = pd.read_csv("./metadata/energy_main_meter.csv")
