@@ -66,6 +66,7 @@ def generate_sankey_elements(query_result, metric_dict,
 
 def generate_multi_level_sankey_elements(query_result, metric_dict,
                                          cluster_type, building_metadata,
+                                         is_building,
                                          color_dict):
 
     building_list = building_metadata.building
@@ -110,22 +111,31 @@ def generate_multi_level_sankey_elements(query_result, metric_dict,
                 element_dict['targets'].\
                     append(np.where(element_dict['labels'] == cluster)[0][0])
 
+                if is_building:
+                    cluster_value = 0
+                else:
+                    cluster_value = temp_df.sum(axis=1)[0]
+
                 element_dict['values'].\
-                    append(temp_df.sum(axis=1)[0])
+                    append(cluster_value)
                 element_dict['color_links'].\
                     append(color_dict['link'][metric])
 
                 # Add the values for the individual building
                 for col in temp_df.columns:
+                    if is_building:
+                        from_source = metric
+                    else:
+                        from_source = cluster
                     element_dict['sources'].\
-                        append(np.where(element_dict['labels'] == cluster)[0][0])
+                        append(np.where(element_dict['labels'] == from_source)[0][0])
                     element_dict['targets'].\
                         append(np.where(element_dict['labels'] == col)[0][0])
                     element_dict['values'].append(temp_df[col][0])
 
                     element_dict['color_links'].append(color_dict['link'][metric])
 
-    for i in range(len(metric_list),len(element_dict['labels'])):
+    for i in range(len(metric_list), len(element_dict['labels'])):
         element = element_dict['labels'][i]
         if element in cluster_list:
             color = color_dict['node']['cluster']
@@ -136,71 +146,132 @@ def generate_multi_level_sankey_elements(query_result, metric_dict,
     for i in range(len(element_dict['labels'])):
         element = element_dict['labels'][i]
         indices = [j for j, x in enumerate(element_dict['targets']) if x == i]
-        if element in metric_list:
-            normalized_value = 'N/A'
-        elif element in cluster_list:
+        if element in cluster_list:
             area = element_dict['element_area'][element]
             value = np.sum(np.array(element_dict['values'])[indices])
             normalized_value = round(value/area, 2)
+
+        elif element in metric_list:
+            normalized_value = 'N/A'
         else:
             area = building_metadata.loc[
                 building_metadata.building == element, 'area'].iloc[0]
             value = np.sum(np.array(element_dict['values'])[indices])
-            normalized_value = round(value/area, 2)
+            normalized_value = round(value / area, 2)
         element_dict['normalized_values'].append(normalized_value)
 
     return element_dict
 
 
-def generate_sankey_building_elements(query_result,
-                                      metric_dict,
-                                      building_metadata,
-                                      color_dict):
+def generate_sankey_date_compare_element(query_result_date_compare, metric_dict,
+                                         cluster_type, building_metadata,
+                                         is_multi_level, is_building,
+                                         color_dict):
 
-    building_list = building_metadata.building.unique()
-    building_long_name = building_metadata.long_name.unique()
+    building_list = building_metadata.building
+    building_long_name = building_metadata.long_name
+    cluster_list = building_metadata[cluster_type].unique()
     metric_list = metric_dict['ref']
+    date_range_list = list(query_result_date_compare.keys())
 
-    # Initialize lists
-    element_dict = {'labels': np.append(metric_list, building_list),
-                    'labels_display': np.append(metric_dict['label'],
-                                                building_long_name),
+    element_dict = {'labels': np.concatenate((metric_list,
+                                              date_range_list,
+                                              cluster_list,
+                                              building_list), axis=None),
+                    'labels_display': np.concatenate((metric_dict['label'],
+                                                      date_range_list,
+                                                      cluster_list,
+                                                      building_long_name), axis=None),
                     'sources': [],
                     'targets': [],
                     'values': [],
+                    'element_area': {},
                     'normalized_values': [],
                     'color_nodes': [],
                     'color_links': []}
 
-    for metric in metric_list:
-        element_dict['color_nodes'].append(color_dict['node'][metric])
+    for date_range in date_range_list:
+        query_result = query_result_date_compare[date_range]
+        for metric in metric_list:
+            element_dict['element_area'] = {metric: []}
+            element_dict['sources'].append(np.where(element_dict['labels'] == metric)[0][0])
+            element_dict['targets'].append(np.where(element_dict['labels'] == date_range)[0][0])
+            temp_df = query_result[metric].loc[:, query_result[metric].columns.isin(building_list)]
+            element_dict['values'].append(temp_df.sum(axis=1)[0])
+            element_dict['color_links']. \
+                append(color_dict['link'][metric])
 
-        for building in building_list:
+            for cluster in cluster_list:
+                building_cluster_list = building_metadata[
+                    building_metadata[cluster_type] == cluster].building
+                element_area = building_metadata[
+                    (building_metadata.building.isin(building_cluster_list))].area.sum()
 
-            temp_df = (query_result[metric].loc[:,
-                       query_result[metric].columns == building])
+                element_dict['element_area'][cluster] = element_area
 
-            if len(temp_df) > 0:
-                element_dict['values'].append(temp_df.sum(axis=1)[0])
+                temp_df = (query_result[metric].
+                               loc[:, query_result[metric].
+                               columns.isin(building_cluster_list)])
 
-                element_dict['sources'].append(np.where(
-                    element_dict['labels'] == metric)[0][0])
+                if len(temp_df) > 0:
+                    # Add the values for the clusters
+                    element_dict['sources']. \
+                        append(np.where(element_dict['labels'] == date_range)[0][0])
 
-                element_dict['targets'].append(np.where(
-                    element_dict['labels'] == building)[0][0])
+                    element_dict['targets']. \
+                        append(np.where(element_dict['labels'] == cluster)[0][0])
+                    if is_building:
+                        cluster_value = 0
+                    else:
+                        cluster_value = temp_df.sum(axis=1)[0]
 
-                element_dict['color_links'].append(color_dict['link'][metric])
-    for i in range(len(element_dict['labels'])-3):
-        element_dict['color_nodes'].append(color_dict['node']['building'])
+                    element_dict['values']. \
+                        append(cluster_value)
+                    element_dict['color_links']. \
+                        append(color_dict['link'][metric])
+
+                    # Add the values for the individual building
+                    if is_multi_level:
+                        for col in temp_df.columns:
+
+                            if is_building:
+                                from_source = date_range
+                            else:
+                                from_source = cluster
+
+                            element_dict['sources']. \
+                                append(np.where(element_dict['labels'] == from_source)[0][0])
+                            element_dict['targets']. \
+                                append(np.where(element_dict['labels'] == col)[0][0])
+                            element_dict['values'].append(temp_df[col][0])
+
+                            element_dict['color_links'].append(color_dict['link'][metric])
+
+    for i in range(len(element_dict['labels'])):
+        element = element_dict['labels'][i]
+        if element in list(building_list):
+            color = color_dict['node']['building']
+        elif element in metric_list:
+            color = color_dict['node'][element]
+        else:
+            color = color_dict['node']['cluster']
+        element_dict['color_nodes'].append(color)
 
     for i in range(len(element_dict['labels'])):
         element = element_dict['labels'][i]
         indices = [j for j, x in enumerate(element_dict['targets']) if x == i]
-        if element in metric_list:
+
+        if element in cluster_list:
+            area = element_dict['element_area'][element]
+            value = np.sum(np.array(element_dict['values'])[indices])
+            normalized_value = round(value/area, 2)
+        elif element in metric_list:
+            normalized_value = 'N/A'
+        elif element in date_range_list:
             normalized_value = 'N/A'
         else:
-            area = building_metadata.loc[building_metadata.building == element,
-                                         'area'].iloc[0]
+            area = building_metadata.loc[
+                building_metadata.building == element, 'area'].iloc[0]
             value = np.sum(np.array(element_dict['values'])[indices])
             normalized_value = round(value/area, 2)
 
@@ -230,24 +301,54 @@ def generate_influx_query(influx_client, start_date, end_date, metric_dict):
     return query_result
 
 
-def generate_sankey(query_result, metric_dict,
-                    building_metadata, color_dict,
-                    cluster_type='building_type_mod',
-                    is_multi_level=True,
-                    is_building=False,):
+def generate_date_comp_query(influx_client, metric_dict,
+                             start_date_1, end_date_1,
+                             start_date_2, end_date_2):
+    query_result_date_compare = {}
+    query_result_1 = generate_influx_query(influx_client,
+                                           start_date_1, end_date_1,
+                                           metric_dict)
+    query_result_2 = generate_influx_query(influx_client,
+                                           start_date_2, end_date_2,
+                                           metric_dict)
 
-    if is_multi_level:
+    date_range_1 = start_date_1[:10] + ' to ' + end_date_1[:10]
+    date_range_2 = start_date_2[:10] + ' to ' + end_date_2[:10]
+
+    query_result_date_compare[date_range_1] = query_result_1
+    query_result_date_compare[date_range_2] = query_result_2
+
+    return query_result_date_compare
+
+
+def generate_sankey_data(query_result, metric_dict,
+                         building_metadata, color_dict,
+                         start_date, end_date,
+                         cluster_type='building_type_mod',
+                         is_multi_level=True,
+                         is_multi_date=False,
+                         is_building=False):
+    if is_multi_date:
+        element_dict = generate_sankey_date_compare_element(query_result,
+                                                            metric_dict,
+                                                            cluster_type,
+                                                            building_metadata,
+                                                            is_multi_level,
+                                                            is_building,
+                                                            color_dict)
+        date_range_list = list(query_result.keys())
+        title = 'Data for {} and {}'.format(date_range_list[0],
+                                            date_range_list[-1])
+    elif is_multi_level:
         element_dict = generate_multi_level_sankey_elements(query_result=query_result,
                                                             metric_dict=metric_dict,
                                                             cluster_type=cluster_type,
                                                             building_metadata=building_metadata,
+                                                            is_building=is_building,
                                                             color_dict=color_dict
                                                             )
-    elif is_building:
-        element_dict = generate_sankey_building_elements(query_result=query_result,
-                                                         metric_dict=metric_dict,
-                                                         building_metadata=building_metadata,
-                                                         color_dict=color_dict)
+        title = 'Data from {} to {}'.format(start_date[:10], end_date[:10])
+
     else:
         element_dict = generate_sankey_elements(query_result=query_result,
                                                 metric_dict=metric_dict,
@@ -255,9 +356,9 @@ def generate_sankey(query_result, metric_dict,
                                                 cluster_type=cluster_type,
                                                 color_dict=color_dict,
                                                 )
+        title = 'Data from {} to {}'.format(start_date[:10], end_date[:10])
 
-    sankey_figure = go.Figure(
-        data=[go.Sankey(
+    sankey_data = go.Sankey(
             valuesuffix=" kWh",
             node=dict(
                 pad=15,
@@ -276,7 +377,18 @@ def generate_sankey(query_result, metric_dict,
                 value=element_dict['values'],
                 color=element_dict['color_links']
             )
-        )]
-    )
+        )
+
+    return sankey_data, title
+
+
+def generate_sankey_figure(sankey_data, title):
+
+    sankey_figure = go.Figure(data=[sankey_data])
+    sankey_figure.update_layout(
+        title={'text': title,
+               'x': 0.5,
+               'xanchor': 'center'})
 
     return sankey_figure
+

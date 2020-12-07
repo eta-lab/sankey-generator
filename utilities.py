@@ -1,3 +1,4 @@
+import pandas as pd
 def generate_string_from_array(array):
     array_string = ""
 
@@ -28,3 +29,13 @@ def generate_option_array_from_list(list_of_options):
                          'value': list_of_options.iloc[i, 0]}
             options.append(temp_dict)
     return options
+
+
+def generate_df_from_query_result(query_result):
+    df = pd.DataFrame()
+    metric_list = query_result.keys()
+    for metric in metric_list:
+        df = df.append(query_result[metric])
+    df.index = metric_list
+    return df
+

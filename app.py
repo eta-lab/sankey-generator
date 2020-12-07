@@ -52,9 +52,9 @@ app.layout = html.Div([
         html.Div([
             dcc.Dropdown(id='cluster-type-selection-campus',
                          options=[
-                             {'label': 'Year Built', 'value': 'year_built_grouping'},
-                             {'label': 'Building Type', 'value': 'building_type_mod'},
-                             {'label': 'Size (m^2)', 'value': 'area_grouping'}],
+                             {'label': 'Building use', 'value': 'building_type_mod'},
+                             {'label': 'Year of construction', 'value': 'year_built_grouping'},
+                             {'label': 'Floor area (m^2)', 'value': 'area_grouping'}],
                          searchable=False,
                          placeholder='Select cluster type',
                          value='building_type_mod',
@@ -111,14 +111,14 @@ app.layout = html.Div([
     ], style={'width': '20%', 'display': 'inline-block', 'vertical-align': 'top'}
     ),
     html.Div([
-            dcc.Graph(
-                id='sankey_diagram_1',
-                style={'height': '100%'}
-            ),
-
-    ], style={'width': '74%', 'display': 'inline-block',
-              "border": "2px black solid", 'margin-left': '10px',
-              'height': 680}
+        html.Div([dcc.Graph(id='sankey_diagram_1'),
+                  dcc.Graph(id='sankey_diagram_2')
+                  ], className='row', style={'height': '100%'})
+    ], id='graph-container',
+        style={'width': '74%',
+               'margin-left': '10px',
+               'display': 'inline-block',
+               'height': 680}
     ),
 ])
 
@@ -153,52 +153,80 @@ def generate_campus_sankey(cluster_type,
                            cluster_selection,
                            building_selection):
 
+    query_result = generate_graph.generate_influx_query(influx_client,
+                                                        start_date,
+                                                        end_date,
+                                                        metric_dict)
+    is_multi_date=False
     if cluster_selection:
         if building_selection:
-            is_building = True
             metadata = building_metadata[building_metadata['building'].isin(building_selection)]
-            is_multi_level = False
+            is_multi_level = True
+            is_building = True
         else:
             metadata = building_metadata[building_metadata[cluster_type].isin(cluster_selection)]
             is_building = False
             if len(metadata) < 20:
                 is_multi_level = True
             else:
-                is_multi_level = False
+                building_list = metadata.building.unique()
+                df = utilities.generate_df_from_query_result(query_result)
+                top_n_building = (df
+                                  .sum(axis=0)[building_list]
+                                  .sort_values(ascending=False)[:20]
+                                  .index)
+                metadata = building_metadata[
+                    building_metadata['building'].isin(top_n_building)]
+                is_multi_level = True
     else:
         is_multi_level = False
-        metadata = building_metadata
         is_building = False
+        metadata = building_metadata
 
-    query_result = generate_graph.generate_influx_query(influx_client,
-                                                        start_date,
-                                                        end_date,
-                                                        metric_dict)
+    sankey_data, title = generate_graph.generate_sankey_data(query_result,
+                                                             metric_dict,
+                                                             metadata,
+                                                             color_dict,
+                                                             start_date,
+                                                             end_date,
+                                                             cluster_type,
+                                                             is_multi_level,
+                                                             is_multi_date,
+                                                             is_building)
 
-    sankey_figure = generate_graph.generate_sankey(query_result,
-                                                   metric_dict,
-                                                   metadata,
-                                                   color_dict,
-                                                   cluster_type,
-                                                   is_multi_level,
-                                                   is_building)
+    sankey_figure = generate_graph.generate_sankey_figure(sankey_data, title)
 
     return sankey_figure
 
 
 # Hide the cluster comparison if no cluster is selected
-@app.callback(Output(component_id='date-picker-campus-comparison',
-                     component_property='disabled'),
+@app.callback([Output(component_id='date-picker-campus-comparison',
+                      component_property='disabled'),
+               Output(component_id='date-picker-campus-comparison',
+                      component_property='start_date'),
+               Output(component_id='date-picker-campus-comparison',
+                      component_property='end_date')],
               [Input(component_id='comparison-date-campus-on-off',
-                     component_property='value')])
-def on_off_and_list_for_cluster_comparison(date_compare):
+                     component_property='value'),
+               Input(component_id='date-picker-campus',
+                     component_property='start_date'),
+               Input(component_id='date-picker-campus',
+                     component_property='end_date')])
+def on_off_and_list_for_cluster_comparison(date_compare,
+                                           start_date_campus,
+                                           end_date_campus):
 
     if date_compare:
         disabled_date = False
+        start_date_compare = start_date_campus
+        end_date_compare = end_date_campus
+
     else:
         disabled_date = True
+        start_date_compare = default_start_date
+        end_date_compare = default_end_date
 
-    return disabled_date
+    return disabled_date, start_date_compare, end_date_compare
 
 
 # Show or hide building selection and generate the list
@@ -225,8 +253,90 @@ def generate_building_list_from_cluster_selection(cluster_selection, cluster_typ
 
     return options_building, disabled
 
+
 # Show or hide campus selection
-# TODO Generate Graph when comparing 2 dates
+@app.callback(
+    [Output(component_id='sankey_diagram_2',
+            component_property='figure'),
+     Output(component_id='sankey_diagram_1',
+            component_property='style'),
+     Output(component_id='sankey_diagram_2',
+            component_property='style')],
+    [Input(component_id='comparison-date-campus-on-off',
+           component_property='value'),
+     Input(component_id='date-picker-campus',
+           component_property='start_date'),
+     Input(component_id='date-picker-campus',
+           component_property='end_date'),
+     Input(component_id='date-picker-campus-comparison',
+           component_property='start_date'),
+     Input(component_id='date-picker-campus-comparison',
+           component_property='end_date'),
+     Input(component_id='cluster-type-selection-campus',
+           component_property='value'),
+     Input(component_id='cluster-selection-campus',
+           component_property='value'),
+     Input(component_id='building-selection-campus',
+           component_property='value')])
+def generate_comparison_sankey(date_compare,
+                               start_date, end_date,
+                               start_date_2, end_date_2,
+                               cluster_type,
+                               cluster_selection,
+                               building_selection):
+    if date_compare:
+
+        query_result_date_compare = (generate_graph
+                                     .generate_date_comp_query(influx_client, metric_dict,
+                                                               start_date, end_date,
+                                                               start_date_2, end_date_2))
+        if cluster_selection:
+            metadata = building_metadata[
+                building_metadata[cluster_type].isin(cluster_selection)]
+            if building_selection:
+                metadata = building_metadata[
+                    building_metadata.building.isin(building_selection)]
+                is_building=True
+            else:
+                is_building=False
+            if len(metadata) > 20:
+                building_list = metadata.building.unique()
+                date_range = start_date[:10] + ' to ' + end_date[:10]
+                df = utilities.generate_df_from_query_result(
+                    query_result_date_compare[date_range])
+                top_n_building = (df
+                                  .sum(axis=0)[building_list]
+                                  .sort_values(ascending=False)[:20]
+                                  .index)
+                metadata = building_metadata[
+                    building_metadata['building'].isin(top_n_building)]
+            is_multi_level = True
+        else:
+            metadata = building_metadata
+            is_multi_level = False
+            is_building = False
+        is_multi_date=True
+        sankey_data, title = (generate_graph
+                              .generate_sankey_data(query_result_date_compare,
+                                                    metric_dict,
+                                                    metadata, color_dict,
+                                                    start_date, end_date,
+                                                    cluster_type,
+                                                    is_multi_level,
+                                                    is_multi_date,
+                                                    is_building))
+
+        sankey_figure = generate_graph.generate_sankey_figure(sankey_data, title)
+        #sankey_figure = {}
+        primary_style = {'display': 'none'}
+        secondary_style = {'height': '100%'}
+
+    else:
+        sankey_figure = {}
+        primary_style = {'height': '100%'}
+        secondary_style = {'display': 'none'}
+
+    return sankey_figure, primary_style, secondary_style
 
 
 if __name__ == '__main__':
