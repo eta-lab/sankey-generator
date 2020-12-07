@@ -43,6 +43,8 @@ min_date = dt(2015, 1, 1)
 max_date = dt(2020, 12, 1)
 initial_date = dt(2019, 10, 31)
 
+n_node_limit = 10
+
 app.layout = html.Div([
 
     html.Div([
@@ -65,13 +67,14 @@ app.layout = html.Div([
                          searchable=False,
                          placeholder='Select cluster',
                          multi=True,
-                         style={'margin-bottom': '10px'}),
+                         style={'margin-bottom': '10px'})
+            ,
             dcc.Dropdown(id='building-selection-campus',
-                         searchable=True,
                          placeholder='Select building',
                          disabled=True,
                          multi=True,
-                         style={'margin-bottom': '10px'})
+                         style={'margin-bottom': '10px',
+                                'height': 200})
             ,
             html.P(children='Select time period',
                    style={'margin-top': '10px'})
@@ -85,6 +88,7 @@ app.layout = html.Div([
                     initial_visible_month=initial_date,
                     with_portal=True,
                     number_of_months_shown=3,
+                    updatemode='bothdates',
                     style={'margin-bottom': '30px'})
             ,
             dcc.Checklist(
@@ -101,6 +105,9 @@ app.layout = html.Div([
                     max_date_allowed=max_date,
                     start_date=default_start_date,
                     end_date=default_end_date,
+                    with_portal=True,
+                    number_of_months_shown=3,
+                    updatemode='bothdates',
                     initial_visible_month=initial_date)
 
             ], id='campus_comp_container',
@@ -111,9 +118,15 @@ app.layout = html.Div([
     ], style={'width': '20%', 'display': 'inline-block', 'vertical-align': 'top'}
     ),
     html.Div([
-        html.Div([dcc.Graph(id='sankey_diagram_1'),
-                  dcc.Graph(id='sankey_diagram_2')
-                  ], className='row', style={'height': '100%'})
+        html.Div([
+            dcc.ConfirmDialog(
+                id='node_exceeded',
+                message='Number of node limited to the {} highest consumption  \n'
+                        'Select specific buildings to have them displayed'.format(n_node_limit),
+            ),
+            dcc.Graph(id='sankey_diagram_1'),
+            dcc.Graph(id='sankey_diagram_2')
+        ], className='row', style={'height': '100%'})
     ], id='graph-container',
         style={'width': '74%',
                'margin-left': '10px',
@@ -157,7 +170,7 @@ def generate_campus_sankey(cluster_type,
                                                         start_date,
                                                         end_date,
                                                         metric_dict)
-    is_multi_date=False
+    is_multi_date = False
     if cluster_selection:
         if building_selection:
             metadata = building_metadata[building_metadata['building'].isin(building_selection)]
@@ -166,14 +179,14 @@ def generate_campus_sankey(cluster_type,
         else:
             metadata = building_metadata[building_metadata[cluster_type].isin(cluster_selection)]
             is_building = False
-            if len(metadata) < 20:
+            if len(metadata) < n_node_limit:
                 is_multi_level = True
             else:
                 building_list = metadata.building.unique()
                 df = utilities.generate_df_from_query_result(query_result)
                 top_n_building = (df
                                   .sum(axis=0)[building_list]
-                                  .sort_values(ascending=False)[:20]
+                                  .sort_values(ascending=False)[:n_node_limit]
                                   .index)
                 metadata = building_metadata[
                     building_metadata['building'].isin(top_n_building)]
@@ -296,17 +309,17 @@ def generate_comparison_sankey(date_compare,
             if building_selection:
                 metadata = building_metadata[
                     building_metadata.building.isin(building_selection)]
-                is_building=True
+                is_building = True
             else:
-                is_building=False
-            if len(metadata) > 20:
+                is_building = False
+            if len(metadata) > n_node_limit:
                 building_list = metadata.building.unique()
                 date_range = start_date[:10] + ' to ' + end_date[:10]
                 df = utilities.generate_df_from_query_result(
                     query_result_date_compare[date_range])
                 top_n_building = (df
                                   .sum(axis=0)[building_list]
-                                  .sort_values(ascending=False)[:20]
+                                  .sort_values(ascending=False)[:n_node_limit]
                                   .index)
                 metadata = building_metadata[
                     building_metadata['building'].isin(top_n_building)]
@@ -327,7 +340,6 @@ def generate_comparison_sankey(date_compare,
                                                     is_building))
 
         sankey_figure = generate_graph.generate_sankey_figure(sankey_data, title)
-        #sankey_figure = {}
         primary_style = {'display': 'none'}
         secondary_style = {'height': '100%'}
 
@@ -338,6 +350,34 @@ def generate_comparison_sankey(date_compare,
 
     return sankey_figure, primary_style, secondary_style
 
+@app.callback(
+    Output(component_id='node_exceeded',
+           component_property='displayed'),
+    [Input(component_id='cluster-selection-campus',
+           component_property='value'),
+     Input(component_id='cluster-type-selection-campus',
+           component_property='value'),
+     Input(component_id='building-selection-campus',
+           component_property='value')]
+)
+def generate_alert_when_node_capacity_exceeded(cluster_selection,
+                                               cluster_type,
+                                               building_selection):
+    if cluster_selection:
+
+        if building_selection:
+            metadata = building_metadata[building_metadata['building']
+                .isin(building_selection)]
+        else:
+            metadata = building_metadata[building_metadata[cluster_type]
+                .isin(cluster_selection)]
+        if len(metadata) > n_node_limit:
+            displayed = True
+        else:
+            displayed = False
+    else:
+        displayed = False
+    return displayed
 
 if __name__ == '__main__':
     app.run_server(debug=True)
