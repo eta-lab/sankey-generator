@@ -9,9 +9,10 @@ def generate_sankey_elements(query_result, metric_dict,
                              color_dict):
     # Initialize lists
     cluster_list = building_metadata[cluster_type].unique()
+    cluster_label = [label[2:] for label in cluster_list]
     metric_list = metric_dict['ref']
     element_dict = {'labels': np.append(metric_list, cluster_list),
-                    'labels_display': np.append(metric_dict['label'], cluster_list),
+                    'labels_display': np.append(metric_dict['label'], cluster_label),
                     'sources': [],
                     'targets': [],
                     'values': [],
@@ -73,12 +74,13 @@ def generate_multi_level_sankey_elements(query_result, metric_dict,
     cluster_list = building_metadata[cluster_type].unique()
     building_long_name = building_metadata.long_name
     metric_list = metric_dict['ref']
+    cluster_label = [label[2:] for label in cluster_list]
 
     element_dict = {'labels': np.concatenate((metric_list,
                                               cluster_list,
                                               building_list), axis=None),
                     'labels_display': np.concatenate((metric_dict['label'],
-                                                      cluster_list,
+                                                      cluster_label,
                                                       building_long_name), axis=None),
                     'sources': [],
                     'targets': [],
@@ -171,6 +173,7 @@ def generate_sankey_date_compare_element(query_result_date_compare, metric_dict,
     building_list = building_metadata.building
     building_long_name = building_metadata.long_name
     cluster_list = building_metadata[cluster_type].unique()
+    cluster_label = [label[2:] for label in cluster_list]
     metric_list = metric_dict['ref']
     date_range_list = list(query_result_date_compare.keys())
 
@@ -180,7 +183,7 @@ def generate_sankey_date_compare_element(query_result_date_compare, metric_dict,
                                               building_list), axis=None),
                     'labels_display': np.concatenate((metric_dict['label'],
                                                       date_range_list,
-                                                      cluster_list,
+                                                      cluster_label,
                                                       building_long_name), axis=None),
                     'sources': [],
                     'targets': [],
@@ -323,7 +326,6 @@ def generate_date_comp_query(influx_client, metric_dict,
 
 def generate_sankey_data(query_result, metric_dict,
                          building_metadata, color_dict,
-                         start_date, end_date,
                          cluster_type='building_type_mod',
                          is_multi_level=True,
                          is_multi_date=False,
@@ -336,9 +338,7 @@ def generate_sankey_data(query_result, metric_dict,
                                                             is_multi_level,
                                                             is_building,
                                                             color_dict)
-        date_range_list = list(query_result.keys())
-        title = 'Data for {} and {}'.format(date_range_list[0],
-                                            date_range_list[-1])
+
     elif is_multi_level:
         element_dict = generate_multi_level_sankey_elements(query_result=query_result,
                                                             metric_dict=metric_dict,
@@ -347,7 +347,6 @@ def generate_sankey_data(query_result, metric_dict,
                                                             is_building=is_building,
                                                             color_dict=color_dict
                                                             )
-        title = 'Data from {} to {}'.format(start_date[:10], end_date[:10])
 
     else:
         element_dict = generate_sankey_elements(query_result=query_result,
@@ -356,7 +355,6 @@ def generate_sankey_data(query_result, metric_dict,
                                                 cluster_type=cluster_type,
                                                 color_dict=color_dict,
                                                 )
-        title = 'Data from {} to {}'.format(start_date[:10], end_date[:10])
 
     sankey_data = go.Sankey(
             valuesuffix=" kWh",
@@ -379,16 +377,12 @@ def generate_sankey_data(query_result, metric_dict,
             )
         )
 
-    return sankey_data, title
+    return sankey_data
 
 
-def generate_sankey_figure(sankey_data, title):
+def generate_sankey_figure(sankey_data):
 
     sankey_figure = go.Figure(data=[sankey_data])
-    sankey_figure.update_layout(
-        title={'text': title,
-               'x': 0.5,
-               'xanchor': 'center'})
 
     return sankey_figure
 

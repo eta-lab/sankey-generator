@@ -1,9 +1,10 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Output, Input
+from dash.dependencies import Output, Input, State
 import pandas as pd
 from datetime import datetime as dt
+from datetime import timedelta
 from influxdb import DataFrameClient
 import numpy as np
 import generate_graph
@@ -41,15 +42,15 @@ default_start_date = "2020-10-01T00:00:00Z"
 default_end_date = "2020-10-31T23:59:59Z"
 min_date = dt(2015, 1, 1)
 max_date = dt(2020, 12, 1)
-initial_date = dt(2019, 10, 31)
+initial_date = dt(2020, 9, 30)
 
-n_node_limit = 10
+n_node_limit = 20
 
 app.layout = html.Div([
 
     html.Div([
         html.H1(children='EnergyFlowVis'),
-        html.H4(children='Visualizing energy use flows on UBC Campus',
+        html.H5(children='Visualizing energy use flows on UBC Campus',
                 style={'font-style': 'italic', 'fontSize': '12'}),
         html.Div([
             dcc.Dropdown(id='cluster-type-selection-campus',
@@ -89,7 +90,7 @@ app.layout = html.Div([
                     with_portal=True,
                     number_of_months_shown=3,
                     updatemode='bothdates',
-                    style={'margin-bottom': '30px'})
+                    style={'margin-bottom': '30px', 'border': '2px black solid'})
             ,
             dcc.Checklist(
                 id='comparison-date-campus-on-off',
@@ -107,6 +108,7 @@ app.layout = html.Div([
                     end_date=default_end_date,
                     with_portal=True,
                     number_of_months_shown=3,
+                    reopen_calendar_on_clear=True,
                     updatemode='bothdates',
                     initial_visible_month=initial_date)
 
@@ -196,18 +198,16 @@ def generate_campus_sankey(cluster_type,
         is_building = False
         metadata = building_metadata
 
-    sankey_data, title = generate_graph.generate_sankey_data(query_result,
-                                                             metric_dict,
-                                                             metadata,
-                                                             color_dict,
-                                                             start_date,
-                                                             end_date,
-                                                             cluster_type,
-                                                             is_multi_level,
-                                                             is_multi_date,
-                                                             is_building)
+    sankey_data = generate_graph.generate_sankey_data(query_result,
+                                                      metric_dict,
+                                                      metadata,
+                                                      color_dict,
+                                                      cluster_type,
+                                                      is_multi_level,
+                                                      is_multi_date,
+                                                      is_building)
 
-    sankey_figure = generate_graph.generate_sankey_figure(sankey_data, title)
+    sankey_figure = generate_graph.generate_sankey_figure(sankey_data)
 
     return sankey_figure
 
@@ -215,6 +215,8 @@ def generate_campus_sankey(cluster_type,
 # Hide the cluster comparison if no cluster is selected
 @app.callback([Output(component_id='date-picker-campus-comparison',
                       component_property='disabled'),
+               Output(component_id='date-picker-campus-comparison',
+                      component_property='style'),
                Output(component_id='date-picker-campus-comparison',
                       component_property='start_date'),
                Output(component_id='date-picker-campus-comparison',
@@ -224,22 +226,25 @@ def generate_campus_sankey(cluster_type,
                Input(component_id='date-picker-campus',
                      component_property='start_date'),
                Input(component_id='date-picker-campus',
-                     component_property='end_date')])
-def on_off_and_list_for_cluster_comparison(date_compare,
-                                           start_date_campus,
-                                           end_date_campus):
+                     component_property='end_date'),
+               ])
+def on_off_and_list_for_cluster_comparison(date_compare, start_date, end_date):
 
     if date_compare:
         disabled_date = False
-        start_date_compare = start_date_campus
-        end_date_compare = end_date_campus
-
+        start_date_compare = dt.strftime(dt.strptime(start_date, "%Y-%m-%dT%H:%M:%SZ") -
+                                         timedelta(days=30), "%Y-%m-%dT%H:%M:%SZ")
+        end_date_compare = dt.strftime(dt.strptime(end_date, "%Y-%m-%dT%H:%M:%SZ") -
+                                       timedelta(days=30), "%Y-%m-%dT%H:%M:%SZ")
+        date_style = {'margin-bottom': '30px', 'border': '2px black solid'}
     else:
         disabled_date = True
         start_date_compare = default_start_date
         end_date_compare = default_end_date
 
-    return disabled_date, start_date_compare, end_date_compare
+        date_style = {}
+
+    return disabled_date, date_style, start_date_compare, end_date_compare
 
 
 # Show or hide building selection and generate the list
@@ -329,17 +334,16 @@ def generate_comparison_sankey(date_compare,
             is_multi_level = False
             is_building = False
         is_multi_date=True
-        sankey_data, title = (generate_graph
-                              .generate_sankey_data(query_result_date_compare,
-                                                    metric_dict,
-                                                    metadata, color_dict,
-                                                    start_date, end_date,
-                                                    cluster_type,
-                                                    is_multi_level,
-                                                    is_multi_date,
-                                                    is_building))
+        sankey_data = (generate_graph
+                       .generate_sankey_data(query_result_date_compare,
+                                             metric_dict,
+                                             metadata, color_dict,
+                                             cluster_type,
+                                             is_multi_level,
+                                             is_multi_date,
+                                             is_building))
 
-        sankey_figure = generate_graph.generate_sankey_figure(sankey_data, title)
+        sankey_figure = generate_graph.generate_sankey_figure(sankey_data)
         primary_style = {'display': 'none'}
         secondary_style = {'height': '100%'}
 
@@ -349,6 +353,7 @@ def generate_comparison_sankey(date_compare,
         secondary_style = {'display': 'none'}
 
     return sankey_figure, primary_style, secondary_style
+
 
 @app.callback(
     Output(component_id='node_exceeded',
@@ -378,6 +383,7 @@ def generate_alert_when_node_capacity_exceeded(cluster_selection,
     else:
         displayed = False
     return displayed
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
