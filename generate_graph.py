@@ -383,6 +383,7 @@ def generate_sankey_data(query_result, metric_dict,
 def generate_sankey_figure(sankey_data):
 
     sankey_figure = go.Figure(data=[sankey_data])
+    sankey_figure.update_layout(margin=dict(l=10, r=100, b=30, t=0, pad=0))
 
     return sankey_figure
 

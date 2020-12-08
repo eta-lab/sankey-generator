@@ -47,11 +47,10 @@ initial_date = dt(2020, 9, 30)
 n_node_limit = 20
 
 app.layout = html.Div([
-
+    html.H2(children='EnergyFlowVis'),
+    html.H5(children='Visualizing energy use flows on UBC Campus',
+            style={'font-style': 'italic', 'fontSize': '12'}),
     html.Div([
-        html.H1(children='EnergyFlowVis'),
-        html.H5(children='Visualizing energy use flows on UBC Campus',
-                style={'font-style': 'italic', 'fontSize': '12'}),
         html.Div([
             dcc.Dropdown(id='cluster-type-selection-campus',
                          options=[
@@ -130,10 +129,10 @@ app.layout = html.Div([
             dcc.Graph(id='sankey_diagram_2')
         ], className='row', style={'height': '100%'})
     ], id='graph-container',
-        style={'width': '74%',
+        style={'width': '78%',
                'margin-left': '10px',
                'display': 'inline-block',
-               'height': 680}
+               'height': 580}
     ),
 ])
 
