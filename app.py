@@ -20,8 +20,12 @@ server = app.server
 building_metadata = pd.read_csv("./metadata/BuildingMetadataAll.csv")
 sensor_metadata = pd.read_csv("./metadata/energy_main_meter.csv")
 
-influx_client = DataFrameClient(host='206.12.88.106', port=8086,
+'''influx_client = DataFrameClient(host='206.12.88.106', port=8086,
                                 username='root', password='root',
+                                database='cpsc-sankey')'''
+
+influx_client = DataFrameClient(host='35.203.121.220', port=8086,
+                                username='admin', password='claudedb',
                                 database='cpsc-sankey')
 
 color_dict = {'node': {'Elec': 'rgba(205, 52, 181, 1.0)',
