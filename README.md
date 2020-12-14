@@ -20,7 +20,9 @@ See https://energy-flow-vis.herokuapp.com/ for the latest deployment.
 
 ## How to run the application
 1) Install all python packages from the requirement.txt file
+  - From the application's folder: pip install -r requirements.txt
 2) Run the app.py file from the folder containing all the other .py files, the metadata folder and the assets folder.
+  - Python app.py
 3) Reach http://127.0.0.1:8050/ and start using the application
 
 ## Authors
