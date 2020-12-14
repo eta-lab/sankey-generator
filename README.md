@@ -24,10 +24,10 @@ See https://energy-flow-vis.herokuapp.com/ for the latest deployment.
 3) Reach http://127.0.0.1:8050/ and start using the application
 
 ## Authors
-Claude Demers-Belanger
-Research Assistant / Masters Candidate
-ETA Lab @ UBC
+Claude Demers-Belanger <br />
+Research Assistant / Masters Candidate <br />
+ETA Lab @ UBC <br />
 
-Sanyogita Manu
-Research Assistant / phd Candidate
-ETA Lab @ UBC
+Sanyogita Manu <br />
+Research Assistant / phd Candidate <br />
+ETA Lab @ UBC <br />
