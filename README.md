@@ -4,7 +4,7 @@ This application was created in the context of the CPSC547 Information Visualiza
 The application allows the user to filter on the building grouping type, then on a specific group and finally on a specific building.
 It also enables users to choose 2 different time range to compare.
 
-The application is built using the Dash framework from plotly. We used the different examples published on their website as a source of inspiration. The framework is built on top of the web framework Flask. The packages that are imported were used as is, our team didn't customize any of the packages.
+The application is built using the Dash framework from plotly (https://dash.plotly.com/). We used the different examples published on their website as a source of inspiration. The framework is built on top of the web framework Flask. The packages that are imported were used as is, our team didn't customize any of the packages.
 
 See https://energy-flow-vis.herokuapp.com/ for the latest deployment.
 
