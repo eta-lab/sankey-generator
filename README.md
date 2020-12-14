@@ -13,7 +13,7 @@ See https://energy-flow-vis.herokuapp.com/ for the latest deployment.
 - Metadata -> Contains the building metadata CSV and the sensor metadata CSV
 - Procfile -> Adds the gunicorn reference so that the application could be deployed on heroku
 - Requirements.txt -> Contains all the necessary python libraries that need to be installed prior to running the application
-- app.py -> This file needs to be executed to run the app. It contains the necessary call to generate the application. When running the file locally, it will run the application at http://127.0.0.1:8050/. This file will call the other libraries created: generate_graph and utilities to generate the graph and for callbacks to update the component displayed. It's where the frame of the application is coded. All packages mentioned in the requirements.txt are called in that code.
+- app.py -> This file needs to be executed to run the app. It contains the necessary call to generate the flask application. When running the file locally, it will run the application at http://127.0.0.1:8050/. This file will call the other libraries created: generate_graph and utilities to generate the graph and for callbacks to update the component displayed. It's where the frame of the application is coded. All packages mentioned in the requirements.txt are called in that code.
 - generate_graph.py -> Library created to define graphical elements for the application. Functions will create the query to the database, others will create the sources, targets and values and finally define the graphical figure. The code uses the packages numpy and plotly.
 - Utilities.py -> Library created so that functions could be easily reused in either app.py or generate_graph.py. It uses the pandas package.
 
