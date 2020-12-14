@@ -7,7 +7,7 @@ It also enable user to choose 2 different time range to compare.
 See https://energy-flow-vis.herokuapp.com/ for the latest deployment.
 
 ## Files and folders
-- Assets - Contains the thumbnail image the CSS file for default formatting in the application. The file was taken from 'https://codepen.io/chriddyp/pen/bWLwgP.css' and the main font was modified to Segoe UI family
+- Assets -> Contains the thumbnail image the CSS file for default formatting in the application. The file was taken from 'https://codepen.io/chriddyp/pen/bWLwgP.css' and the main font was modified to Segoe UI family
 - Metadata -> Contains the building metadata CSV and the sensor metadata CSV
 - Procfile -> Adds the gunicorn reference so that the application could be deployed on heroku
 - Requirements.txt -> Contains all the necessary python librairies that need to be installed prior to running the application
@@ -20,7 +20,7 @@ See https://energy-flow-vis.herokuapp.com/ for the latest deployment.
 1) Install all python packages from the requirement.txt file
 2) Run the app.py file.
 
-# Authors
+## Authors
 Claude Demers-Belanger
 Research Assistant / Masters Candidate
 ETA Lab @ UBC
