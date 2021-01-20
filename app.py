@@ -29,30 +29,30 @@ color_dict = {'node': {1: 'rgba(205, 52, 181, 1.0)',
               'link': {1: 'rgba(205, 52, 181, 0.2)',
                        2: 'rgba(255, 177, 78, 0.2)'}}
 
-default_start_date = "2020-10-01T00:00:00Z"
-default_end_date = "2020-10-31T23:59:59Z"
+default_start_date = "2020-10-01"
+default_end_date = "2020-10-31"
 min_date = dt(2015, 1, 1)
 max_date = dt(2020, 12, 1)
 initial_date = dt(2020, 9, 30)
 
-n_node_limit = 20
+category_columns = sensor_metadata.filter(regex='category', axis=1).columns
+category_options = utilities.generate_category_options(category_columns)
 
 app.layout = html.Div([
     html.H2(children='EnergyFlowVis'),
-    html.H5(children='Visualizing energy use flows on UBC Campus',
+    html.H5(children='Visualizing energy use flows',
             style={'font-style': 'italic', 'fontSize': '12'}),
     html.Div([
         html.Div([
             dcc.Dropdown(id='category-type-selection',
-                         options=[
-                             {'label': 'End use', 'value': 'end_use_label'}],
+                         options=category_options,
                          searchable=False,
                          placeholder='Select category type',
-                         value='end_use_label',
+                         value='category_end_use',
                          clearable=False,
                          style={'margin-bottom': '10px', 'margin-top': '10px'})
             ,
-            dcc.Dropdown(id='cluster-selection',
+            dcc.Dropdown(id='category-selection',
                          searchable=False,
                          placeholder='Select category',
                          multi=True,
@@ -60,10 +60,8 @@ app.layout = html.Div([
             ,
             dcc.Dropdown(id='building-selection',
                          placeholder='Select building',
-                         disabled=True,
                          multi=True,
-                         style={'margin-bottom': '10px',
-                                'height': 200})
+                         style={'margin-bottom': '10px'})
             ,
             html.P(children='Select time period',
                    style={'margin-top': '10px'})
@@ -100,7 +98,7 @@ app.layout = html.Div([
                     updatemode='bothdates',
                     initial_visible_month=initial_date)
 
-            ], id='comp_container',
+            ], id='comp-container',
                 style={'display': 'block'}
             ),
 
@@ -109,12 +107,7 @@ app.layout = html.Div([
     ),
     html.Div([
         html.Div([
-            dcc.ConfirmDialog(
-                id='node_exceeded',
-                message='Number of node limited to the {} highest consumption  \n'
-                        'Select specific buildings to have them displayed'.format(n_node_limit),
-            ),
-            dcc.Graph(id='sankey_diagram')
+            dcc.Graph(id='sankey-diagram')
         ], className='row', style={'height': '100%'})
     ], id='graph-container',
         style={'width': '78%',
@@ -123,6 +116,109 @@ app.layout = html.Div([
                'height': 580}
     ),
 ])
+
+
+@app.callback(
+    Output(component_id='category-selection', component_property='options'),
+    [Input(component_id='category-type-selection', component_property='value')]
+)
+def generate_cluster_list_campus(category_type):
+    category_list = sensor_metadata[category_type].unique()
+
+    if len(category_list) > 0:
+        options = utilities.generate_option_array_from_list(np.sort(category_list))
+
+    else:
+        options = [{'label': 'Not Found', 'value': 'nan'}]
+
+    return options
+
+
+@app.callback(
+    Output(component_id='building-selection', component_property='options'),
+    [Input(component_id='category-type-selection', component_property='value'),
+     Input(component_id='category-selection', component_property='value')]
+)
+def generate_cluster_list_campus(category_type, category_selection):
+    if category_selection:
+        building_list = sensor_metadata.loc[
+            sensor_metadata[category_type].isin(category_selection), 'building'].unique()
+
+    else:
+        building_list = sensor_metadata['building'].unique()
+
+    options = utilities.generate_option_array_from_list(np.sort(building_list))
+
+    return options
+
+
+@app.callback(
+    Output(component_id='sankey-diagram', component_property='figure'),
+    [Input(component_id='category-type-selection', component_property='value'),
+     Input(component_id='category-selection', component_property='value'),
+     Input(component_id='building-selection', component_property='value'),
+     Input(component_id='date-picker', component_property='start_date'),
+     Input(component_id='date-picker', component_property='end_date'),
+     Input(component_id='date-picker-comparison', component_property='start_date'),
+     Input(component_id='date-picker-comparison', component_property='end_date'),
+     ]
+)
+def display_and_update_sankey_diagram(category_type,
+                                      category_selection,
+                                      building_selection,
+                                      start_date_1, end_date_1,
+                                      start_date_2, end_date_2):
+
+    if category_selection:
+        metadata = sensor_metadata[sensor_metadata[category_type].isin(category_selection)]
+    else:
+        metadata = sensor_metadata
+
+    if building_selection:
+
+        metadata = metadata[metadata['building'].isin(building_selection)]
+
+    else:
+        metadata = metadata
+
+    building_list = metadata['building'].unique()
+
+    query_result_dates = generate_graph.generate_dates_query(influx_client,
+                                                             building_list,
+                                                             start_date_1, end_date_1,
+                                                             start_date_2, end_date_2)
+
+    sankey_figure = generate_graph.generate_sankey_figure(query_result_dates,
+                                                          metadata,
+                                                          category_type,
+                                                          color_dict)
+
+    return sankey_figure
+
+@app.callback(
+    [Output(component_id='date-picker-comparison', component_property='disabled'),
+     Output(component_id='date-picker-comparison', component_property='style'),
+     Output(component_id='date-picker-comparison', component_property='start_date'),
+     Output(component_id='date-picker-comparison', component_property='end_date')],
+    [Input(component_id='comparison-date-on-off', component_property='value'),
+     Input(component_id='date-picker', component_property='start_date'),
+     Input(component_id='date-picker', component_property='end_date')]
+)
+def enable_date_comparison(on_off, start_date, end_date):
+    if on_off:
+        disabled_date = False
+        start_date_compare = dt.strftime(dt.strptime(start_date, "%Y-%m-%d") -
+                                         timedelta(days=30), "%Y-%m-%d")
+        end_date_compare = dt.strftime(dt.strptime(end_date, "%Y-%m-%d") -
+                                       timedelta(days=30), "%Y-%m-%d")
+        date_style = {'margin-bottom': '30px', 'border': '2px black solid'}
+    else:
+        disabled_date = True
+        start_date_compare = start_date
+        end_date_compare = end_date
+        date_style = {}
+
+    return disabled_date, date_style, start_date_compare, end_date_compare
 
 
 if __name__ == '__main__':

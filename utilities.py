@@ -39,3 +39,12 @@ def generate_df_from_query_result(query_result):
     df.index = metric_list
     return df
 
+
+def generate_category_options(columns):
+    options = []
+    for col in columns:
+        category_text = col[len('category_'):].replace('_', ' ')
+        temp_dict = {'label': category_text, 'value': col}
+        options.append(temp_dict)
+
+    return options

@@ -59,18 +59,18 @@ def generate_sankey_elements(query_result_dates, sensor_metadata, category_type,
                     'values': [],
                     'color_nodes': [],
                     'color_links': []}
+
     i = 0
     for date_range in date_ranges:
         i += 1
         query_result = query_result_dates[date_range]
-        element_dict['color_nodes'].append(color_dict['nodes'][i])
+        element_dict['color_nodes'].append(color_dict['node'][i])
         for building in building_list:
             element_dict['sources'].append(np.where(element_dict['labels'] == date_range)[0][0])
             element_dict['targets'].append(np.where(element_dict['labels'] == building)[0][0])
             temp_df_building = query_result[building].loc[:, query_result[building].columns.isin(sensor_list)]
             element_dict['values'].append(temp_df_building.sum(axis=1)[0])
             element_dict['color_links'].append(color_dict['link'][i])
-
             for category in category_list:
                 sensor_category_list = sensor_metadata[
                     sensor_metadata[category_type] == category].sensor_short_id
@@ -106,7 +106,7 @@ def generate_sankey_elements(query_result_dates, sensor_metadata, category_type,
 
 
 def generate_sankey_figure(query_result_dates, sensor_metadata,
-                           color_dict, category_type):
+                           category_type, color_dict):
 
     element_dict = generate_sankey_elements(query_result_dates,
                                             sensor_metadata,
@@ -119,7 +119,7 @@ def generate_sankey_figure(query_result_dates, sensor_metadata,
             thickness=20,
 
             line=dict(color="black", width=0.5),
-            label=element_dict['labels_display'],
+            label=element_dict['labels'],
             color=element_dict['color_nodes']
         ),
         link=dict(
