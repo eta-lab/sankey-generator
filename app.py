@@ -141,12 +141,12 @@ def generate_cluster_list_campus(category_type):
 )
 def generate_cluster_list_campus(category_type, category_selection):
     if category_selection:
-        building_list = sensor_metadata.loc[
-            sensor_metadata[category_type].isin(category_selection), 'building'].unique()
-
+        # building_list = sensor_metadata.loc[
+        #    sensor_metadata[category_type].isin(category_selection), 'building'].unique()
+        building_list = ['Pharmacy', 'simulation_Pharmacy']
     else:
-        building_list = sensor_metadata['building'].unique()
-
+        # building_list = sensor_metadata['building'].unique()
+        building_list = ['Pharmacy', 'simulation_Pharmacy']
     options = utilities.generate_option_array_from_list(np.sort(building_list))
 
     return options
@@ -181,8 +181,8 @@ def display_and_update_sankey_diagram(category_type,
     else:
         metadata = metadata
 
-    building_list = metadata['building'].unique()
-
+    # building_list = metadata['building'].unique()
+    building_list = ['Pharmacy', 'simulation_Pharmacy']
     query_result_dates = generate_graph.generate_dates_query(influx_client,
                                                              building_list,
                                                              start_date_1, end_date_1,

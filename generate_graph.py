@@ -48,7 +48,8 @@ def generate_sankey_elements(query_result_dates, sensor_metadata, category_type,
     category_list = sensor_metadata[category_type].unique()
     date_ranges = list(query_result_dates.keys())
     sensor_list = sensor_metadata.sensor_short_id
-    building_list = sensor_metadata.building.unique()
+    # building_list = sensor_metadata.building.unique()
+    building_list = ['Pharmacy', 'simulation_Pharmacy']
 
     element_dict = {'labels': np.concatenate((date_ranges,
                                               building_list,
@@ -66,8 +67,8 @@ def generate_sankey_elements(query_result_dates, sensor_metadata, category_type,
         query_result = query_result_dates[date_range]
         element_dict['color_nodes'].append(color_dict['node'][i])
         for building in building_list:
-            element_dict['sources'].append(np.where(element_dict['labels'] == date_range)[0][0])
-            element_dict['targets'].append(np.where(element_dict['labels'] == building)[0][0])
+            element_dict['sources'].append(np.where(element_dict['labels'] == building)[0][0])
+            element_dict['targets'].append(np.where(element_dict['labels'] == date_range)[0][0])
             temp_df_building = query_result[building].loc[:, query_result[building].columns.isin(sensor_list)]
             element_dict['values'].append(temp_df_building.sum(axis=1)[0])
             element_dict['color_links'].append(color_dict['link'][i])
@@ -81,7 +82,7 @@ def generate_sankey_elements(query_result_dates, sensor_metadata, category_type,
 
                 if len(temp_df_category) > 0:
                     # Add the values for the end_use
-                    element_dict['sources'].append(np.where(element_dict['labels'] == building)[0][0])
+                    element_dict['sources'].append(np.where(element_dict['labels'] == date_range)[0][0])
 
                     element_dict['targets'].append(np.where(element_dict['labels'] == category)[0][0])
 
