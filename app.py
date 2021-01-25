@@ -15,28 +15,48 @@ app = dash.Dash(__name__)
 app.title = "BDRG Sankey Generator"
 server = app.server
 
+# Reading metadata to memory
 sensor_metadata = pd.read_csv("./metadata/sensorMetadata.csv")
+building_metadata = pd.read_csv("./metadata/BuildingMetadataAll.csv")
 
+# Database connection
 influx_client = DataFrameClient(host='206.12.88.106', port=8086,
                                 username='root', password='root',
                                 database='sankey-generator')
 
-
+# Color and metric dictionnaries
 color_dict = {'node': {1: 'rgba(205, 52, 181, 1.0)',
                        2: 'rgba(255, 177, 78, 1.0)',
                        'building': 'rgba(177, 177, 177, 1.0)',
-                       'category': 'rgba(85, 85, 85, 1.0)'},
-              'link': {1: 'rgba(205, 52, 181, 0.2)',
+                       'category': 'rgba(85, 85, 85, 1.0)',
+                       'Elec': 'rgba(205, 52, 181, 1.0)',
+                       'HotWater': 'rgba(255, 177, 78, 1.0)',
+                       'Gas': 'rgba(0, 0, 255, 1.0',
+                       },
+              'link': {'Elec': 'rgba(205, 52, 181, 0.2)',
+                       'HotWater': 'rgba(255, 177, 78, 0.2)',
+                       'Gas': 'rgba(0, 0, 255, 0.2',
+                       1: 'rgba(205, 52, 181, 0.2)',
                        2: 'rgba(255, 177, 78, 0.2)'}}
 
+
+# Setting up default dates
 default_start_date = "2020-10-01"
 default_end_date = "2020-10-31"
 min_date = dt(2015, 1, 1)
 max_date = dt(2020, 12, 1)
 initial_date = dt(2020, 9, 30)
 
+# Generating categories from the metadata
 category_columns = sensor_metadata.filter(regex='category', axis=1).columns
 category_options = utilities.generate_category_options(category_columns)
+
+# Generating metric list
+metric_dict = {"ref": ['Elec', 'Gas', 'HotWater'],
+               "label": ['Electricity', 'Gas', 'Hot Water']}
+
+metric_list = metric_dict['ref']
+
 
 app.layout = html.Div([
     html.H2(children='EnergyFlowVis'),
@@ -181,8 +201,8 @@ def display_and_update_sankey_diagram(category_type,
     else:
         metadata = metadata
 
-    # building_list = metadata['building'].unique()
-    building_list = ['Pharmacy', 'simulation_Pharmacy']
+    building_list = metadata['building'].unique()
+    # building_list = ['Pharmacy', 'simulation_Pharmacy']
     query_result_dates = generate_graph.generate_dates_query(influx_client,
                                                              building_list,
                                                              start_date_1, end_date_1,

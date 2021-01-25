@@ -1,4 +1,6 @@
 import pandas as pd
+
+
 def generate_string_from_array(array):
     array_string = ""
 
@@ -48,3 +50,11 @@ def generate_category_options(columns):
         options.append(temp_dict)
 
     return options
+
+
+def generate_building_list_sim(building_list):
+    building_list_sim = []
+    for building in building_list:
+        building_list_sim.append(building)
+        building_list_sim.append("simulation_"+building)
+    return building_list_sim
