@@ -10,12 +10,13 @@ def generate_string_from_array(array):
     return array_string[:-2]
 
 
-def generate_top_n_df(df, n):
-    sorted_df = df.sort_values(by=df.index[0], axis=1, ascending=False)
-    col_to_drop = sorted_df.columns[n:]
-    sorted_df['others'] = sorted_df.loc[:, col_to_drop].sum(axis=1)
-    sorted_df = sorted_df.drop(columns=col_to_drop)
-    return sorted_df
+def generate_top_n_list(query_result_dates, element_list, n):
+    temp_df = pd.DataFrame()
+    for key in query_result_dates.keys():
+        temp_df = temp_df.append(query_result_dates[key])
+    n_list = temp_df.sum(axis=0).filter(element_list).sort_values(ascending=False).index[:n]
+
+    return n_list
 
 
 def generate_option_array_from_list(list_of_options):
