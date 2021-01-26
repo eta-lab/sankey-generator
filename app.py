@@ -162,8 +162,7 @@ app.layout = html.Div([
     ),
     html.Div([
         html.Div([
-            dcc.Graph(id='sankey-diagram'),
-            dcc.Graph(id='sankey-diagram-2')
+            dcc.Graph(id='sankey-diagram')
         ], className='row', style={'height': '100%'})
     ], id='graph-container',
         style={'width': '78%',
@@ -204,53 +203,6 @@ def generate_cluster_list_campus(category_type, category_selection):
     options = utilities.generate_option_array_from_list(np.sort(building_list))
 
     return options
-
-
-@app.callback(
-    Output(component_id='sankey-diagram', component_property='figure'),
-    [Input(component_id='category-type-selection', component_property='value'),
-     Input(component_id='category-selection', component_property='value'),
-     Input(component_id='building-selection', component_property='value'),
-     Input(component_id='date-picker', component_property='start_date'),
-     Input(component_id='date-picker', component_property='end_date'),
-     Input(component_id='date-picker-comparison', component_property='start_date'),
-     Input(component_id='date-picker-comparison', component_property='end_date'),
-     ]
-)
-def display_and_update_building_sankey_diagram(category_type,
-                                               category_selection,
-                                               building_selection,
-                                               start_date_1, end_date_1,
-                                               start_date_2, end_date_2):
-
-    if category_selection:
-        metadata = sensor_metadata[sensor_metadata[category_type].isin(category_selection)]
-    else:
-        metadata = sensor_metadata
-
-    if building_selection:
-
-        metadata = metadata[metadata['building'].isin(building_selection)]
-
-    else:
-        metadata = metadata
-
-    building_list = metadata['building'].unique()
-    building_list_sim = utilities.generate_building_list_sim(building_list)
-
-    query_result_dates = generate_graph.generate_dates_query(influx_client,
-                                                             building_list_sim,
-                                                             start_date_1, end_date_1,
-                                                             start_date_2, end_date_2)
-
-    element_dict = generate_graph.generate_sankey_elements_building(query_result_dates,
-                                                                    metadata,
-                                                                    category_type,
-                                                                    color_dict)
-
-    sankey_figure = generate_graph.generate_sankey_figure(element_dict)
-
-    return sankey_figure
 
 
 # enable of disable the date compare
@@ -304,8 +256,23 @@ def building_filter_list(building_grouping, group_selection):
     return options
 
 
+# Lock second date when building is selected
+@app.callback(Output(component_id='comparison-date-on-off', component_property='options'),
+              [Input(component_id='building-selection', component_property='value')])
+def turn_off_date_compare(building_selection):
+    if building_selection:
+        options = [{'label': 'Add another time period for comparison',
+                    'value': 'comp',
+                    'disabled': True}]
+    else:
+        options = [{'label': 'Add another time period for comparison',
+                    'value': 'comp'}]
+
+    return options
+
+
 # Generate Campus Sankey Figure
-@app.callback(Output(component_id='sankey-diagram-2', component_property='figure'),
+@app.callback(Output(component_id='sankey-diagram', component_property='figure'),
               [Input(component_id='building-grouping-selection', component_property='value'),
                Input(component_id='group-selection', component_property='value'),
                Input(component_id='building-filter', component_property='value'),
@@ -346,6 +313,7 @@ def display_and_update_building_sankey_diagram(grouping_type, group_selection, b
                 building_metadata[grouping_type].isin(group_selection)]
         else:
             building_metadata_filtered = building_metadata
+
         if building_filter:
             building_metadata_filtered = building_metadata_filtered[
                 building_metadata_filtered.building.isin(building_filter)]
@@ -354,6 +322,7 @@ def display_and_update_building_sankey_diagram(grouping_type, group_selection, b
                                                                  metric_list,
                                                                  start_date_1, end_date_1,
                                                                  start_date_2, end_date_2)
+
         element_dict = generate_graph.generate_sankey_elements_campus(query_result_dates, metric_list,
                                                                       building_metadata_filtered,
                                                                       grouping_type, max_nodes,

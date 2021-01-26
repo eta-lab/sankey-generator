@@ -69,7 +69,6 @@ def generate_sankey_elements_building(query_result_dates, sensor_metadata, categ
     for date_range in date_ranges:
         i += 1
         query_result = query_result_dates[date_range]
-        # element_dict['color_nodes'].append(color_dict['node'][i])
         for building in building_list_sim:
             element_dict['sources'].append(np.where(element_dict['labels'] ==
                                                     building)[0][0])
@@ -130,7 +129,10 @@ def generate_sankey_elements_campus(query_result_dates, metric_list, building_me
     group_list = building_metadata[grouping_type].unique()
     date_ranges = list(query_result_dates.keys())
     building_list = building_metadata.building.unique()
-    top_n_building = utilities.generate_top_n_list(query_result_dates, building_list, max_nodes)
+    if len(building_list) > max_nodes:
+        top_n_building = utilities.generate_top_n_list(query_result_dates, building_list, max_nodes)
+    else:
+        top_n_building = building_list
 
     element_dict = {'labels': np.concatenate((metric_list,
                                               date_ranges,
@@ -140,14 +142,17 @@ def generate_sankey_elements_campus(query_result_dates, metric_list, building_me
                     'targets': [],
                     'values': [],
                     'color_nodes': [],
-                    'color_links': []}
+                    'color_links': [],
+                    'x_values': [],
+                    'y_values': []}
 
     for date_range in date_ranges:
         query_result = query_result_dates[date_range]
         for metric in metric_list:
-            element_dict['sources'].append(np.where(element_dict['labels'] == metric)[0][0])
+
             if len(date_ranges) > 1:
-                element_dict['targets'].append(np.where(element_dict['labels'] == date_range[0][0]))
+                element_dict['sources'].append(np.where(element_dict['labels'] == metric)[0][0])
+                element_dict['targets'].append(np.where(element_dict['labels'] == date_range)[0][0])
                 temp_df_date = query_result.loc[metric, query_result.columns.isin(building_list)]
                 element_dict['values'].append(temp_df_date.sum())
                 element_dict['color_links'].append(color_dict['link'][metric])
@@ -156,22 +161,28 @@ def generate_sankey_elements_campus(query_result_dates, metric_list, building_me
                 building_group_list = building_metadata[building_metadata[
                                                             grouping_type] == group].building
                 temp_df_group = query_result.loc[metric, query_result.columns.isin(building_group_list)]
-                if len(temp_df_group) > 0:
-                    if len(date_ranges) > 1:
-                        element_dict['sources'].append(np.where(element_dict['labels'] == date_range))
-                    element_dict['targets'].append(np.where(element_dict['labels'] == group))
-                    group_value = temp_df_group.sum()
-                    element_dict['values'].append(group_value)
-                    element_dict['color_links'].append(color_dict['link'][metric])
-                    for col in temp_df_group:
-                        if col in top_n_building:
+                # if temp_df_group.sum() > 0:
+                if len(date_ranges) > 1:
+                    source_lvl2 = date_range
 
-                            element_dict['sources'].append(
-                                np.where(element_dict['labels'] == group))
-                            element_dict['targets'].append(
-                                np.where(element_dict['labels'] == col))
-                            element_dict['value'].append(temp_df_group.loc[metric, col][0])
-                            element_dict['color_links'].append(color_dict['link'][metric])
+                else:
+                    source_lvl2 = metric
+
+                element_dict['sources'].append(
+                    np.where(element_dict['labels'] == source_lvl2)[0][0])
+                element_dict['targets'].append(np.where(element_dict['labels'] == group)[0][0])
+                group_value = temp_df_group.sum()
+                element_dict['values'].append(group_value)
+                element_dict['color_links'].append(color_dict['link'][metric])
+                for col in temp_df_group.index:
+                    if (col in top_n_building) & (temp_df_group[col] > 0):
+
+                        element_dict['sources'].append(
+                            np.where(element_dict['labels'] == group)[0][0])
+                        element_dict['targets'].append(
+                            np.where(element_dict['labels'] == col)[0][0])
+                        element_dict['values'].append(temp_df_group[col])
+                        element_dict['color_links'].append(color_dict['link'][metric])
 
     for i in range(len(element_dict['labels'])):
         element = element_dict['labels'][i]
@@ -179,8 +190,10 @@ def generate_sankey_elements_campus(query_result_dates, metric_list, building_me
             color = color_dict['node']['building']
         elif element in metric_list:
             color = color_dict['node'][element]
+
         else:
             color = color_dict['node']['group']
+
         element_dict['color_nodes'].append(color)
 
     return element_dict

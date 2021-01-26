@@ -16,7 +16,7 @@ def generate_top_n_list(query_result_dates, element_list, n):
         temp_df = temp_df.append(query_result_dates[key])
     n_list = temp_df.sum(axis=0).filter(element_list).sort_values(ascending=False).index[:n]
 
-    return n_list
+    return list(n_list)
 
 
 def generate_option_array_from_list(list_of_options):
