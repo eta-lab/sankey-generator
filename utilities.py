@@ -59,3 +59,11 @@ def generate_building_list_sim(building_list):
         building_list_sim.append(building)
         building_list_sim.append("simulation_"+building)
     return building_list_sim
+
+
+def generate_simulation_labels(category_list):
+    labels_list = []
+    for element in category_list:
+        labels_list.append(element)
+        labels_list.append(element+'_SIMULATION')
+    return labels_list
