@@ -72,9 +72,11 @@ app.layout = html.Div([
             style={'font-style': 'italic', 'fontSize': '12'}),
     html.Div([
         html.Div([
-            html.P(children='Campus energy use viewer',
-                   style={'margin-top': '10px'})
-            ,
+            html.P(children='For more information see the code and'
+                            ' paper presented at Building Simulation 2021 on github'),
+            html.A("BS2021 Sankey Generator Github",
+                   href='https://github.com/eta-lab/sankey-generator',
+                   target="_blank"),
             dcc.Dropdown(id='building-grouping-selection',
                          options=[
                              {'label': 'Building use', 'value': 'building_type_mod'},
