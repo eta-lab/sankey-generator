@@ -39,10 +39,12 @@ color_dict = {'node': {1: 'rgba(0, 172, 0, 1.0)',
               'link': {'Elec': 'rgba(205, 52, 181, 0.2)',
                        'HotWater': 'rgba(255, 177, 78, 0.2)',
                        'Gas': 'rgba(0, 0, 255, 0.2)',
-                       1: {'real': 'rgba(0, 172, 0, 0.4)',
+                       1: {'real': 'rgba(177, 177, 177, 0.4)',
                            'simulation': 'rgba(0, 172, 0, 0.1)'},
                        2: {'real': 'rgba(224, 0, 188, 0.4)',
-                           'simulation': 'rgba(224, 0, 188, 0.1)'}}}
+                           'simulation': 'rgba(224, 0, 188, 0.1)'},
+                       'green': 'rgba(0, 172, 0, 0.4)',
+                       'red': 'rgba(224, 0, 30, 0.4)'}}
 
 max_nodes = 20
 
@@ -302,7 +304,7 @@ def display_and_update_building_sankey_diagram(grouping_type, group_selection, b
                                                                  start_date_1, end_date_1,
                                                                  start_date_2, end_date_2)
 
-        element_dict = generate_graph.generate_sankey_elements_building(query_result_dates,
+        element_dict = generate_graph.generate_sankey_elements_simulation(query_result_dates,
                                                                         metadata,
                                                                         category_type,
                                                                         color_dict)
