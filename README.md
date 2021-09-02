@@ -1,2 +1,2 @@
 # sankey-generator
-This is to start the work on a sankey diagram generator
+To execute this cote, simply install the packages from requirements.txt and run app.py
